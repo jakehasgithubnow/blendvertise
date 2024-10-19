@@ -18,6 +18,27 @@
     </div>
 
     <script>
+        function customJSONParse(str) {
+            // Remove non-printable and other non-valid JSON characters
+            str = str.replace(/[\u0000-\u001F]+/g, "")
+                     .replace(/\\"/g, '"')
+                     .replace(/\\'/g, "'")
+                     .replace(/\\&/g, "&")
+                     .replace(/\\r/g, '\r')
+                     .replace(/\\n/g, '\n')
+                     .replace(/\\t/g, '\t')
+                     .replace(/\\b/g, '\b')
+                     .replace(/\\f/g, '\f');
+
+            try {
+                return JSON.parse(str);
+            } catch (e) {
+                console.error("Error in custom JSON parse:", e);
+                // If JSON.parse fails, try a more permissive approach
+                return (new Function("return " + str))();
+            }
+        }
+
         document.addEventListener('DOMContentLoaded', function() {
             const urlParams = new URLSearchParams(window.location.search);
             const encodedData = urlParams.get('data');
@@ -25,21 +46,8 @@
             if (encodedData) {
                 let decodedData;
                 try {
-                    // Decode the URL-encoded string
-                    let jsonString = decodeURIComponent(encodedData);
-                    
-                    // Replace any non-printable characters except for valid whitespace
-                    jsonString = jsonString.replace(/[\u0000-\u001F]+/g, function(match) {
-                        return match.split('').map(char => {
-                            if (char === '\n') return '\\n';
-                            if (char === '\r') return '\\r';
-                            if (char === '\t') return '\\t';
-                            return '';
-                        }).join('');
-                    });
-
-                    // Now try to parse the sanitized JSON
-                    decodedData = JSON.parse(jsonString);
+                    // Decode the URL-encoded string and use our custom parser
+                    decodedData = customJSONParse(decodeURIComponent(encodedData));
                 } catch (error) {
                     console.error('Error parsing JSON:', error);
                     document.body.innerHTML += '<p>Error parsing response data. Please check the console for details.</p>';
