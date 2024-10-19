@@ -50,35 +50,50 @@
             const encodedData = urlParams.get('data');
             
             if (encodedData) {
+                let decodedData;
                 try {
-                    const decodedData = JSON.parse(decodeURIComponent(encodedData));
-                    
-                    // Display article content
-                    const articleElement = document.getElementById('article');
-                    decodedData.article.content.forEach(content => {
-                        const p = document.createElement('p');
-                        p.textContent = `${content.sentence_number}. ${content.sentence_content}`;
-                        articleElement.appendChild(p);
-                    });
-
-                    // Display ads
-                    const adsElement = document.getElementById('ads');
-                    decodedData.ads.forEach(ad => {
-                        const adDiv = document.createElement('div');
-                        adDiv.className = 'ad';
-                        adDiv.innerHTML = `
-                            <p><strong>Ad ${ad.ad_number}</strong></p>
-                            <p>${ad.ad_text}</p>
-                            <p>Brand: ${ad.brand}</p>
-                            <p>Link: <a href="${ad.link}" target="_blank">${ad.link}</a></p>
-                        `;
-                        adsElement.appendChild(adDiv);
-                    });
-
+                    decodedData = JSON.parse(decodeURIComponent(encodedData));
                 } catch (error) {
-                    console.error('Error parsing data:', error);
-                    document.body.innerHTML += '<p>Error parsing response data.</p>';
+                    console.error('Error parsing JSON:', error);
+                    // Attempt to fix common JSON issues
+                    const fixedJson = decodeURIComponent(encodedData)
+                        .replace(/\n/g, '\\n')
+                        .replace(/\r/g, '\\r')
+                        .replace(/\t/g, '\\t')
+                        .replace(/\f/g, '\\f')
+                        .replace(/[\u0000-\u0019]+/g, "")
+                        .replace(/\\"/g, '"')
+                        .replace(/'/g, "\\'");
+                    try {
+                        decodedData = JSON.parse(fixedJson);
+                    } catch (secondError) {
+                        console.error('Failed to parse JSON even after fixing:', secondError);
+                        document.body.innerHTML += '<p>Error parsing response data. Please check the console for details.</p>';
+                        return;
+                    }
                 }
+
+                // Display article content
+                const articleElement = document.getElementById('article');
+                decodedData.article.content.forEach(content => {
+                    const p = document.createElement('p');
+                    p.textContent = `${content.sentence_number}. ${content.sentence_content}`;
+                    articleElement.appendChild(p);
+                });
+
+                // Display ads
+                const adsElement = document.getElementById('ads');
+                decodedData.ads.forEach(ad => {
+                    const adDiv = document.createElement('div');
+                    adDiv.className = 'ad';
+                    adDiv.innerHTML = `
+                        <p><strong>Ad ${ad.ad_number}</strong></p>
+                        <p>${ad.ad_text}</p>
+                        <p>Brand: ${ad.brand}</p>
+                        <p>Link: <a href="${ad.link}" target="_blank">${ad.link}</a></p>
+                    `;
+                    adsElement.appendChild(adDiv);
+                });
             } else {
                 document.body.innerHTML += '<p>No data received from webhook.</p>';
             }
