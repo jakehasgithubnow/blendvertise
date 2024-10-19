@@ -16,33 +16,18 @@
         h1, h2 {
             color: #2c3e50;
         }
-        #article, #ads {
+        #results {
             background-color: #f9f9f9;
             border: 1px solid #ddd;
             border-radius: 4px;
             padding: 20px;
-            margin-bottom: 20px;
-        }
-        .ad {
-            border-top: 1px solid #ddd;
-            padding-top: 10px;
-            margin-top: 10px;
-        }
-        .ad:first-child {
-            border-top: none;
-            padding-top: 0;
-            margin-top: 0;
+            white-space: pre-wrap;
         }
     </style>
 </head>
 <body>
     <h1>Webhook Response Results</h1>
-    <div id="article">
-        <h2>Article Content</h2>
-    </div>
-    <div id="ads">
-        <h2>Advertisements</h2>
-    </div>
+    <div id="results"></div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -50,41 +35,15 @@
             const encodedData = urlParams.get('data');
             
             if (encodedData) {
-                let decodedData;
                 try {
-                    // First, properly decode the URL-encoded string
-                    const decodedString = decodeURIComponent(encodedData);
-                    // Then parse the JSON
-                    decodedData = JSON.parse(decodedString);
+                    const decodedData = JSON.parse(decodeURIComponent(encodedData));
+                    document.getElementById('results').textContent = JSON.stringify(decodedData, null, 2);
                 } catch (error) {
-                    console.error('Error decoding or parsing JSON:', error);
-                    document.body.innerHTML += '<p>Error processing response data. Please check the console for details.</p>';
-                    return;
+                    console.error('Error parsing data:', error);
+                    document.getElementById('results').textContent = 'Error parsing response data.';
                 }
-
-                // Display article content
-                const articleElement = document.getElementById('article');
-                decodedData.article.content.forEach(content => {
-                    const p = document.createElement('p');
-                    p.textContent = `${content.sentence_number}. ${content.sentence_content}`;
-                    articleElement.appendChild(p);
-                });
-
-                // Display ads
-                const adsElement = document.getElementById('ads');
-                decodedData.ads.forEach(ad => {
-                    const adDiv = document.createElement('div');
-                    adDiv.className = 'ad';
-                    adDiv.innerHTML = `
-                        <p><strong>Ad ${ad.ad_number}</strong></p>
-                        <p>${ad.ad_text}</p>
-                        <p>Brand: ${ad.brand}</p>
-                        <p>Link: <a href="${ad.link}" target="_blank">${ad.link}</a></p>
-                    `;
-                    adsElement.appendChild(adDiv);
-                });
             } else {
-                document.body.innerHTML += '<p>No data received from webhook.</p>';
+                document.getElementById('results').textContent = 'No data received from webhook.';
             }
         });
     </script>
