@@ -5,24 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Webhook Response Results</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        h1, h2 {
-            color: #2c3e50;
-        }
-        #results {
-            background-color: #f9f9f9;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            padding: 20px;
-            white-space: pre-wrap;
-        }
+        /* ... (keep existing styles) ... */
     </style>
 </head>
 <body>
@@ -31,20 +14,26 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            console.log('Results page loaded');
             const storedData = localStorage.getItem('webhookResponse');
+            console.log('Data retrieved from localStorage:', storedData);
+            
             const resultsElement = document.getElementById('results');
             
             if (storedData) {
                 try {
                     const parsedData = JSON.parse(storedData);
+                    console.log('Parsed data:', parsedData);
                     resultsElement.textContent = JSON.stringify(parsedData, null, 2);
                     // Clear the data from localStorage after displaying
                     localStorage.removeItem('webhookResponse');
+                    console.log('Data cleared from localStorage');
                 } catch (error) {
                     console.error('Error parsing data:', error);
                     resultsElement.textContent = 'Error parsing response data.';
                 }
             } else {
+                console.log('No data found in localStorage');
                 resultsElement.textContent = 'No data received from webhook.';
             }
         });
