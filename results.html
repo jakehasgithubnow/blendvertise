@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="span">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,22 +7,16 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            line-height: 1.6;
-            color: #333;
             max-width: 800px;
             margin: 0 auto;
             padding: 20px;
         }
-        h1 {
-            color: #2c3e50;
-        }
         #results {
-            background-color: #f9f9f9;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            padding: 20px;
             white-space: pre-wrap;
             word-wrap: break-word;
+            background-color: #f0f0f0;
+            padding: 10px;
+            border: 1px solid #ddd;
         }
     </style>
 </head>
@@ -36,16 +30,7 @@
             const resultsElement = document.getElementById('results');
             
             if (storedData) {
-                try {
-                    // Attempt to parse the stored data as JSON
-                    const parsedData = JSON.parse(storedData);
-                    resultsElement.textContent = JSON.stringify(parsedData, null, 2);
-                } catch (error) {
-                    console.error('Error parsing stored data:', error);
-                    // If parsing fails, display the raw data
-                    resultsElement.textContent = storedData;
-                }
-                // Clear the data from localStorage after displaying
+                resultsElement.textContent = storedData;
                 localStorage.removeItem('webhookResponse');
             } else {
                 resultsElement.textContent = 'No data received from webhook.';
