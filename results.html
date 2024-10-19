@@ -5,34 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Webhook Response Results</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        h1, h2 {
-            color: #2c3e50;
-        }
-        #article, #ads {
-            background-color: #f9f9f9;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            padding: 20px;
-            margin-bottom: 20px;
-        }
-        .ad {
-            border-top: 1px solid #ddd;
-            padding-top: 10px;
-            margin-top: 10px;
-        }
-        .ad:first-child {
-            border-top: none;
-            padding-top: 0;
-            margin-top: 0;
-        }
+        /* ... (keep the existing styles) ... */
     </style>
 </head>
 <body>
@@ -52,25 +25,25 @@
             if (encodedData) {
                 let decodedData;
                 try {
-                    decodedData = JSON.parse(decodeURIComponent(encodedData));
+                    // Decode the URL-encoded string
+                    let jsonString = decodeURIComponent(encodedData);
+                    
+                    // Replace any non-printable characters except for valid whitespace
+                    jsonString = jsonString.replace(/[\u0000-\u001F]+/g, function(match) {
+                        return match.split('').map(char => {
+                            if (char === '\n') return '\\n';
+                            if (char === '\r') return '\\r';
+                            if (char === '\t') return '\\t';
+                            return '';
+                        }).join('');
+                    });
+
+                    // Now try to parse the sanitized JSON
+                    decodedData = JSON.parse(jsonString);
                 } catch (error) {
                     console.error('Error parsing JSON:', error);
-                    // Attempt to fix common JSON issues
-                    const fixedJson = decodeURIComponent(encodedData)
-                        .replace(/\n/g, '\\n')
-                        .replace(/\r/g, '\\r')
-                        .replace(/\t/g, '\\t')
-                        .replace(/\f/g, '\\f')
-                        .replace(/[\u0000-\u0019]+/g, "")
-                        .replace(/\\"/g, '"')
-                        .replace(/'/g, "\\'");
-                    try {
-                        decodedData = JSON.parse(fixedJson);
-                    } catch (secondError) {
-                        console.error('Failed to parse JSON even after fixing:', secondError);
-                        document.body.innerHTML += '<p>Error parsing response data. Please check the console for details.</p>';
-                        return;
-                    }
+                    document.body.innerHTML += '<p>Error parsing response data. Please check the console for details.</p>';
+                    return;
                 }
 
                 // Display article content
