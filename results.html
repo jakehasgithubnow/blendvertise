@@ -31,19 +31,21 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const encodedData = urlParams.get('data');
+            const storedData = localStorage.getItem('webhookResponse');
+            const resultsElement = document.getElementById('results');
             
-            if (encodedData) {
+            if (storedData) {
                 try {
-                    const decodedData = JSON.parse(decodeURIComponent(encodedData));
-                    document.getElementById('results').textContent = JSON.stringify(decodedData, null, 2);
+                    const parsedData = JSON.parse(storedData);
+                    resultsElement.textContent = JSON.stringify(parsedData, null, 2);
+                    // Clear the data from localStorage after displaying
+                    localStorage.removeItem('webhookResponse');
                 } catch (error) {
                     console.error('Error parsing data:', error);
-                    document.getElementById('results').textContent = 'Error parsing response data.';
+                    resultsElement.textContent = 'Error parsing response data.';
                 }
             } else {
-                document.getElementById('results').textContent = 'No data received from webhook.';
+                resultsElement.textContent = 'No data received from webhook.';
             }
         });
     </script>
