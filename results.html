@@ -5,7 +5,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Webhook Response Results</title>
     <style>
-        /* ... (keep the existing styles) ... */
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1, h2 {
+            color: #2c3e50;
+        }
+        #article, #ads {
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .ad {
+            border-top: 1px solid #ddd;
+            padding-top: 10px;
+            margin-top: 10px;
+        }
+        .ad:first-child {
+            border-top: none;
+            padding-top: 0;
+            margin-top: 0;
+        }
     </style>
 </head>
 <body>
@@ -18,27 +45,6 @@
     </div>
 
     <script>
-        function customJSONParse(str) {
-            // Remove non-printable and other non-valid JSON characters
-            str = str.replace(/[\u0000-\u001F]+/g, "")
-                     .replace(/\\"/g, '"')
-                     .replace(/\\'/g, "'")
-                     .replace(/\\&/g, "&")
-                     .replace(/\\r/g, '\r')
-                     .replace(/\\n/g, '\n')
-                     .replace(/\\t/g, '\t')
-                     .replace(/\\b/g, '\b')
-                     .replace(/\\f/g, '\f');
-
-            try {
-                return JSON.parse(str);
-            } catch (e) {
-                console.error("Error in custom JSON parse:", e);
-                // If JSON.parse fails, try a more permissive approach
-                return (new Function("return " + str))();
-            }
-        }
-
         document.addEventListener('DOMContentLoaded', function() {
             const urlParams = new URLSearchParams(window.location.search);
             const encodedData = urlParams.get('data');
@@ -46,11 +52,13 @@
             if (encodedData) {
                 let decodedData;
                 try {
-                    // Decode the URL-encoded string and use our custom parser
-                    decodedData = customJSONParse(decodeURIComponent(encodedData));
+                    // First, properly decode the URL-encoded string
+                    const decodedString = decodeURIComponent(encodedData);
+                    // Then parse the JSON
+                    decodedData = JSON.parse(decodedString);
                 } catch (error) {
-                    console.error('Error parsing JSON:', error);
-                    document.body.innerHTML += '<p>Error parsing response data. Please check the console for details.</p>';
+                    console.error('Error decoding or parsing JSON:', error);
+                    document.body.innerHTML += '<p>Error processing response data. Please check the console for details.</p>';
                     return;
                 }
 
