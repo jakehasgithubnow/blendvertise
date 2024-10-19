@@ -79,11 +79,11 @@
                 },
                 body: jsonData
             })
-            .then(response => response.json())
+            .then(response => response.text())  // Changed from response.json() to response.text()
             .then(data => {
                 console.log('Received data from webhook:', data);
-                // Store the response data in localStorage
-                localStorage.setItem('webhookResponse', JSON.stringify(data));
+                // Store the raw response data in localStorage
+                localStorage.setItem('webhookResponse', data);
                 console.log('Data stored in localStorage');
                 // Redirect to results page without any query parameters
                 window.location.href = 'results.html';
