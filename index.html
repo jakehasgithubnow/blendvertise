@@ -3,25 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simple Webhook Form with Data Passing</title>
+    <title>Webhook Form Submission</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            background-color: #f0f0f0;
-        }
-        .container {
-            background-color: white;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
             padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
-        textarea {
-            width: 300px;
+        h1 {
+            color: #2c3e50;
+        }
+        #userInput {
+            width: 100%;
             height: 150px;
             margin-bottom: 10px;
             padding: 5px;
@@ -40,13 +36,12 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <form id="webhookForm">
-            <textarea id="userInput" placeholder="Enter your text here..."></textarea>
-            <br>
-            <button type="submit">Submit</button>
-        </form>
-    </div>
+    <h1>Webhook Form Submission</h1>
+    <form id="webhookForm">
+        <textarea id="userInput" placeholder="Enter your text here..."></textarea>
+        <br>
+        <button type="submit">Submit</button>
+    </form>
 
     <script>
         document.getElementById('webhookForm').addEventListener('submit', function(e) {
@@ -55,22 +50,50 @@
             const userInput = document.getElementById('userInput').value;
             const webhookUrl = 'https://hook.eu2.make.com/gtjunp62cfdpaqtui3um5jkus99r5e8v';
 
+            // Sanitize the input
+            const sanitizedInput = userInput
+                .replace(/[\u0000-\u001F]+/g, "") // Remove control characters
+                .replace(/\\/g, "\\\\") // Escape backslashes
+                .replace(/"/g, '\\"'); // Escape double quotes
+
+            // Create a properly formatted JSON object
+            const jsonData = JSON.stringify({
+                article: {
+                    content: [
+                        {
+                            sentence_number: 1,
+                            sentence_content: sanitizedInput
+                        }
+                    ]
+                },
+                ads: [
+                    {
+                        ad_number: 1,
+                        ad_text: "Check out Adidas for top-of-the-line fitness gear that fits your lifestyle.",
+                        brand: "Adidas",
+                        link: "https://adidas.com/fitness"
+                    }
+                ]
+            });
+
             fetch(webhookUrl, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ text: userInput }),
+                body: jsonData
             })
-            .then(response => response.json())
-            .then(data => {
-                // Encode the response data and redirect to results.html
-                const encodedData = encodeURIComponent(JSON.stringify(data));
-                window.location.href = `results.html?data=${encodedData}`;
+            .then(response => {
+                if (response.ok) {
+                    alert('Data sent successfully!');
+                    document.getElementById('userInput').value = '';
+                } else {
+                    throw new Error('Network response was not ok');
+                }
             })
             .catch(error => {
                 console.error('Error:', error);
-                alert('Error sending data or processing response. Please try again.');
+                alert('Error sending data. Please try again.');
             });
         });
     </script>
