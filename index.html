@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simple Webhook Form with Redirect</title>
+    <title>Simple Webhook Form with Data Passing</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -62,18 +62,15 @@
                 },
                 body: JSON.stringify({ text: userInput }),
             })
-            .then(response => {
-                if (response.ok) {
-                    console.log('Data sent successfully!');
-                    // Redirect to .com/result
-                    window.location.href = 'https://example.com/result';
-                } else {
-                    throw new Error('Network response was not ok');
-                }
+            .then(response => response.json())
+            .then(data => {
+                // Encode the response data and redirect to results.html
+                const encodedData = encodeURIComponent(JSON.stringify(data));
+                window.location.href = `results.html?data=${encodedData}`;
             })
             .catch(error => {
                 console.error('Error:', error);
-                alert('Error sending data. Please try again.');
+                alert('Error sending data or processing response. Please try again.');
             });
         });
     </script>
