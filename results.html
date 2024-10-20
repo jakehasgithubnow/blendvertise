@@ -17,13 +17,18 @@
             color: #333;
             margin-bottom: 30px;
         }
-        #results {
+        #results, #debug {
             white-space: pre-wrap;
             word-wrap: break-word;
             background-color: #fff;
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        #debug {
+            background-color: #f0f0f0;
+            font-family: monospace;
         }
         #loadingOverlay {
             display: flex;
@@ -54,6 +59,7 @@
 <body>
     <h1>Blendvertise Results</h1>
     <div id="results">Loading results...</div>
+    <div id="debug">Debug information will appear here...</div>
     <div id="loadingOverlay">
         <div class="spinner"></div>
     </div>
@@ -61,8 +67,13 @@
     <script>
         const loadingOverlay = document.getElementById('loadingOverlay');
         const resultsElement = document.getElementById('results');
+        const debugElement = document.getElementById('debug');
 
-        // Function to get URL parameters
+        function log(message) {
+            console.log(message);
+            debugElement.textContent += message + '\n';
+        }
+
         function getUrlParameter(name) {
             name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
             var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
@@ -70,49 +81,60 @@
             return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
         }
 
-        // Get the record ID from the URL
         const recordId = getUrlParameter('recordId');
+        log(`Record ID: ${recordId}`);
 
         if (recordId) {
-            // Airtable API endpoint
             const airtableUrl = `https://api.airtable.com/v0/appebg5mTyr0n3IC2/tblT2UflSMRpwrBtW/${recordId}`;
+            log(`Fetching data from: ${airtableUrl}`);
 
-            // Fetch data from Airtable
             fetch(airtableUrl, {
                 headers: {
                     'Authorization': 'Bearer patNwUWSMcd150uoi.f61251b6451ad5b257df31a8be47c67e27adbeeb3cced79565ff3c331ff5f896'
                 }
             })
             .then(response => {
+                log(`Response status: ${response.status}`);
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
                 return response.json();
             })
             .then(data => {
-                // Format and display the data
-                let formattedResult = `Original Content:\n${data.fields.original_content}\n\n`;
-                formattedResult += `Generated Ads:\n`;
-                
-                if (data.fields.generated_ads) {
+                log('Received data:');
+                log(JSON.stringify(data, null, 2));
+
+                let formattedResult = '';
+                if (data.fields && data.fields.original_content) {
+                    formattedResult += `Original Content:\n${data.fields.original_content}\n\n`;
+                } else {
+                    formattedResult += 'Original Content: Not found in response\n\n';
+                }
+
+                formattedResult += 'Generated Ads:\n';
+                if (data.fields && data.fields.generated_ads) {
                     data.fields.generated_ads.forEach((ad, index) => {
                         formattedResult += `Ad ${index + 1}:\n`;
-                        formattedResult += `Text: ${ad.ad_text}\n`;
-                        formattedResult += `Brand: ${ad.brand}\n`;
-                        formattedResult += `Link: ${ad.link}\n\n`;
+                        formattedResult += `Text: ${ad.ad_text || 'N/A'}\n`;
+                        formattedResult += `Brand: ${ad.brand || 'N/A'}\n`;
+                        formattedResult += `Link: ${ad.link || 'N/A'}\n\n`;
                     });
+                } else {
+                    formattedResult += 'No generated ads found in response\n';
                 }
 
                 resultsElement.textContent = formattedResult;
             })
             .catch(error => {
                 console.error('Error:', error);
-                resultsElement.textContent = 'Error fetching results. Please try again.';
+                log(`Error: ${error.message}`);
+                resultsElement.textContent = 'Error fetching results. Please check the debug information below.';
             })
             .finally(() => {
                 loadingOverlay.style.display = 'none';
             });
         } else {
+            log('No record ID provided in URL');
             resultsElement.textContent = 'No record ID provided. Please submit content from the main page.';
             loadingOverlay.style.display = 'none';
         }
