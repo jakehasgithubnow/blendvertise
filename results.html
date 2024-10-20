@@ -35,17 +35,6 @@
         .offer {
             font-style: italic;
         }
-        .error {
-            color: #ff0000;
-            font-weight: bold;
-        }
-        pre {
-            white-space: pre-wrap;
-            word-wrap: break-word;
-            background-color: #f0f0f0;
-            padding: 10px;
-            border-radius: 4px;
-        }
     </style>
 </head>
 <body>
@@ -57,21 +46,13 @@
             const storedData = localStorage.getItem('webhookResponse');
             const resultsElement = document.getElementById('results');
             
-            console.log("Stored data:", storedData);  // Debug log
-
             if (storedData) {
                 try {
-                    // Parse the stored data
                     const data = JSON.parse(storedData);
-                    console.log("Parsed data:", data);  // Debug log
-
                     displayResults(data);
                 } catch (error) {
-                    console.error("Error parsing JSON:", error);  // Debug log
-                    resultsElement.innerHTML = `
-                        <div class="error">Error parsing the response data. See raw data below:</div>
-                        <pre>${escapeHtml(storedData)}</pre>
-                    `;
+                    console.error("Error parsing JSON:", error);
+                    resultsElement.textContent = 'Error parsing the response data.';
                 }
                 localStorage.removeItem('webhookResponse');
             } else {
@@ -81,20 +62,15 @@
 
         function displayResults(data) {
             const resultsElement = document.getElementById('results');
-            resultsElement.innerHTML = ''; // Clear previous results
-            
+            resultsElement.innerHTML = '';
+
             // Display original content
             const contentBox = document.createElement('div');
             contentBox.className = 'content-box';
-            let contentHtml = '<h2>Original Content</h2>';
-            
-            if (data.article && data.article.content && data.article.content.length > 0) {
-                contentHtml += `<p>${escapeHtml(data.article.content[0].sentence_content)}</p>`;
-            } else {
-                contentHtml += '<p>No content available</p>';
-            }
-            
-            contentBox.innerHTML = contentHtml;
+            contentBox.innerHTML = `
+                <h2>Original Content</h2>
+                <p>${data.article.content[0].sentence_content}</p>
+            `;
             resultsElement.appendChild(contentBox);
 
             // Display ads
@@ -102,47 +78,25 @@
             adsBox.className = 'content-box';
             adsBox.innerHTML = '<h2>Generated Ads</h2>';
 
-            let adCount = 0;
-            if (data.ads && Array.isArray(data.ads)) {
-                data.ads.forEach(ad => {
-                    if (ad.ad_text || ad.brand || ad.offer || ad.link) {
-                        adCount++;
-                        const adElement = document.createElement('div');
-                        adElement.className = 'ad';
-                        adElement.innerHTML = `
-                            ${ad.ad_text ? `<p>${escapeHtml(ad.ad_text)}</p>` : ''}
-                            ${ad.brand ? `<p class="brand">Brand: ${escapeHtml(ad.brand)}</p>` : ''}
-                            ${ad.offer ? `<p class="offer">Offer: ${escapeHtml(ad.offer)}</p>` : ''}
-                            ${ad.link ? `<p><a href="${escapeHtml(ad.link)}" target="_blank">Learn More</a></p>` : ''}
-                        `;
-                        adsBox.appendChild(adElement);
-                    }
-                });
-            }
-            
-            if (adCount === 0) {
+            data.ads.forEach(ad => {
+                if (ad.ad_text) {
+                    const adElement = document.createElement('div');
+                    adElement.className = 'ad';
+                    adElement.innerHTML = `
+                        <p>${ad.ad_text}</p>
+                        <p class="brand">Brand: ${ad.brand}</p>
+                        <p class="offer">Offer: ${ad.offer}</p>
+                        ${ad.link ? `<p><a href="${ad.link}" target="_blank">Learn More</a></p>` : ''}
+                    `;
+                    adsBox.appendChild(adElement);
+                }
+            });
+
+            if (adsBox.children.length === 1) { // Only the h2 is present
                 adsBox.innerHTML += '<p>No ads available</p>';
             }
 
             resultsElement.appendChild(adsBox);
-
-            // Debug output
-            const debugBox = document.createElement('div');
-            debugBox.className = 'content-box';
-            debugBox.innerHTML = `
-                <h2>Debug Information</h2>
-                <pre>${escapeHtml(JSON.stringify(data, null, 2))}</pre>
-            `;
-            resultsElement.appendChild(debugBox);
-        }
-
-        function escapeHtml(unsafe) {
-            return unsafe
-                 .replace(/&/g, "&amp;")
-                 .replace(/</g, "&lt;")
-                 .replace(/>/g, "&gt;")
-                 .replace(/"/g, "&quot;")
-                 .replace(/'/g, "&#039;");
         }
     </script>
 </body>
