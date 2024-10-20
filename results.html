@@ -85,6 +85,9 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+        .highlight {
+            background-color: #FEF3F7;
+        }
     </style>
 </head>
 <body>
@@ -120,6 +123,12 @@
             return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
         }
 
+        function sanitizeHTML(str) {
+            const temp = document.createElement('div');
+            temp.textContent = str;
+            return temp.innerHTML;
+        }
+
         const recordId = getUrlParameter('recordId');
 
         if (recordId) {
@@ -140,7 +149,12 @@
             })
             .then(data => {
                 if (data.fields && data.fields.article) {
-                articleContent.innerHTML = data.fields.article.replace(/\n/g, '<br>');
+                    const sanitizedContent = sanitizeHTML(data.fields.article);
+                    const formattedContent = sanitizedContent
+                        .replace(/\n/g, '<br>')
+                        .replace(/&lt;span class="highlight"&gt;/g, '<span class="highlight">')
+                        .replace(/&lt;\/span&gt;/g, '</span>');
+                    articleContent.innerHTML = formattedContent;
                 } else {
                     articleContent.textContent = 'Original article not found in response.';
                 }
@@ -156,9 +170,9 @@
                             adDiv.className = 'ad';
                             adDiv.innerHTML = `
                                 <strong>Ad ${adNumber}:</strong><br>
-                                Text: ${data.fields[`ad_${adNumber}_text`] || 'N/A'}<br>
-                                Brand: ${data.fields[`ad_${adNumber}_brand`] || 'N/A'}<br>
-                                Offer: ${data.fields[`ad_${adNumber}_offer`] || 'N/A'}
+                                Text: ${sanitizeHTML(data.fields[`ad_${adNumber}_text`]) || 'N/A'}<br>
+                                Brand: ${sanitizeHTML(data.fields[`ad_${adNumber}_brand`]) || 'N/A'}<br>
+                                Offer: ${sanitizeHTML(data.fields[`ad_${adNumber}_offer`]) || 'N/A'}
                             `;
                             adsContent.appendChild(adDiv);
                         });
