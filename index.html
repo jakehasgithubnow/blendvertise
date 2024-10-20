@@ -117,13 +117,24 @@
 
         const loadingOverlay = document.getElementById('loadingOverlay');
 
+        // Function to generate a UUID
+        function generateUUID() {
+            return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
+                (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+            );
+        }
+
         document.getElementById('webhookForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
             const userInput = document.getElementById('userInput').value;
             const webhookUrl = 'https://hook.eu2.make.com/gtjunp62cfdpaqtui3um5jkus99r5e8v';
 
+            // Generate a demo_uuid
+            const demoUUID = generateUUID();
+
             const jsonData = JSON.stringify({
+                demo_uuid: demoUUID,
                 article: {
                     content: [
                         {
