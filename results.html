@@ -3,25 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Webhook Response Results</title>
+    <title>Blendvertise Results</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             max-width: 800px;
             margin: 0 auto;
             padding: 20px;
+            background-color: #f5f5f5;
         }
-        #results {
-            white-space: pre-wrap;
-            word-wrap: break-word;
-            background-color: #f0f0f0;
-            padding: 10px;
+        h1, h2 {
+            color: #333;
+        }
+        .content-box {
+            background-color: white;
             border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .ad {
+            background-color: #f0f0f0;
+            border-left: 4px solid #ff6b6b;
+            padding: 10px;
+            margin-top: 10px;
+        }
+        .brand {
+            font-weight: bold;
+            color: #ff6b6b;
+        }
+        .offer {
+            font-style: italic;
         }
     </style>
 </head>
 <body>
-    <h1>Webhook Response Results</h1>
+    <h1>Blendvertise Results</h1>
     <div id="results"></div>
 
     <script>
@@ -30,12 +47,50 @@
             const resultsElement = document.getElementById('results');
             
             if (storedData) {
-                resultsElement.textContent = storedData;
+                try {
+                    const data = JSON.parse(storedData);
+                    displayResults(data);
+                } catch (error) {
+                    resultsElement.textContent = 'Error parsing the response data.';
+                }
                 localStorage.removeItem('webhookResponse');
             } else {
                 resultsElement.textContent = 'No data received from webhook.';
             }
         });
+
+        function displayResults(data) {
+            const resultsElement = document.getElementById('results');
+            
+            // Display original content
+            const contentBox = document.createElement('div');
+            contentBox.className = 'content-box';
+            contentBox.innerHTML = `
+                <h2>Original Content</h2>
+                <p>${data.article.content[0].sentence_content}</p>
+            `;
+            resultsElement.appendChild(contentBox);
+
+            // Display ads
+            const adsBox = document.createElement('div');
+            adsBox.className = 'content-box';
+            adsBox.innerHTML = '<h2>Generated Ads</h2>';
+
+            data.ads.forEach(ad => {
+                if (ad.ad_text) {
+                    const adElement = document.createElement('div');
+                    adElement.className = 'ad';
+                    adElement.innerHTML = `
+                        <p>${ad.ad_text}</p>
+                        <p class="brand">${ad.brand}</p>
+                        <p class="offer">${ad.offer}</p>
+                    `;
+                    adsBox.appendChild(adElement);
+                }
+            });
+
+            resultsElement.appendChild(adsBox);
+        }
     </script>
 </body>
 </html>
