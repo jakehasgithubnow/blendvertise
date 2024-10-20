@@ -83,7 +83,12 @@
                     'Authorization': 'Bearer patNwUWSMcd150uoi.f61251b6451ad5b257df31a8be47c67e27adbeeb3cced79565ff3c331ff5f896'
                 }
             })
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
             .then(data => {
                 // Format and display the data
                 let formattedResult = `Original Content:\n${data.fields.original_content}\n\n`;
