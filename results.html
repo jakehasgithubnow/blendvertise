@@ -12,23 +12,35 @@
             padding: 20px;
             background-color: #f5f5f5;
         }
-        h1 {
-            font-size: 2.5em;
+        h1, h2 {
             color: #333;
-            margin-bottom: 30px;
         }
-        #results, #debug {
-            white-space: pre-wrap;
-            word-wrap: break-word;
+        .content-box {
             background-color: #fff;
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             margin-bottom: 20px;
         }
+        #article {
+            border-left: 5px solid #4CAF50;
+        }
+        #ads {
+            border-left: 5px solid #2196F3;
+        }
+        .ad {
+            background-color: #f9f9f9;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
         #debug {
+            white-space: pre-wrap;
+            word-wrap: break-word;
             background-color: #f0f0f0;
             font-family: monospace;
+            padding: 10px;
+            border-radius: 5px;
         }
         #loadingOverlay {
             display: flex;
@@ -58,7 +70,14 @@
 </head>
 <body>
     <h1>Blendvertise Results</h1>
-    <div id="results">Loading results...</div>
+    <div id="article" class="content-box">
+        <h2>Original Article</h2>
+        <div id="articleContent"></div>
+    </div>
+    <div id="ads" class="content-box">
+        <h2>Generated Ads</h2>
+        <div id="adsContent"></div>
+    </div>
     <div id="debug">Debug information will appear here...</div>
     <div id="loadingOverlay">
         <div class="spinner"></div>
@@ -66,7 +85,8 @@
 
     <script>
         const loadingOverlay = document.getElementById('loadingOverlay');
-        const resultsElement = document.getElementById('results');
+        const articleContent = document.getElementById('articleContent');
+        const adsContent = document.getElementById('adsContent');
         const debugElement = document.getElementById('debug');
 
         function log(message) {
@@ -104,38 +124,45 @@
                 log('Received data:');
                 log(JSON.stringify(data, null, 2));
 
-                let formattedResult = '';
-                if (data.fields && data.fields.original_content) {
-                    formattedResult += `Original Content:\n${data.fields.original_content}\n\n`;
+                if (data.fields && data.fields.article) {
+                    articleContent.textContent = data.fields.article;
                 } else {
-                    formattedResult += 'Original Content: Not found in response\n\n';
+                    articleContent.textContent = 'Original article not found in response.';
                 }
 
-                formattedResult += 'Generated Ads:\n';
-                if (data.fields && data.fields.generated_ads) {
-                    data.fields.generated_ads.forEach((ad, index) => {
-                        formattedResult += `Ad ${index + 1}:\n`;
-                        formattedResult += `Text: ${ad.ad_text || 'N/A'}\n`;
-                        formattedResult += `Brand: ${ad.brand || 'N/A'}\n`;
-                        formattedResult += `Link: ${ad.link || 'N/A'}\n\n`;
-                    });
+                if (data.fields) {
+                    const adKeys = Object.keys(data.fields).filter(key => key.startsWith('ad_') && key.endsWith('_text'));
+                    if (adKeys.length > 0) {
+                        adKeys.forEach((adKey, index) => {
+                            const adNumber = adKey.split('_')[1];
+                            const adDiv = document.createElement('div');
+                            adDiv.className = 'ad';
+                            adDiv.innerHTML = `
+                                <strong>Ad ${adNumber}:</strong><br>
+                                Text: ${data.fields[`ad_${adNumber}_text`] || 'N/A'}<br>
+                                Brand: ${data.fields[`ad_${adNumber}_brand`] || 'N/A'}<br>
+                                Offer: ${data.fields[`ad_${adNumber}_offer`] || 'N/A'}
+                            `;
+                            adsContent.appendChild(adDiv);
+                        });
+                    } else {
+                        adsContent.textContent = 'No generated ads found in response.';
+                    }
                 } else {
-                    formattedResult += 'No generated ads found in response\n';
+                    adsContent.textContent = 'No data fields found in response.';
                 }
-
-                resultsElement.textContent = formattedResult;
             })
             .catch(error => {
                 console.error('Error:', error);
                 log(`Error: ${error.message}`);
-                resultsElement.textContent = 'Error fetching results. Please check the debug information below.';
+                articleContent.textContent = 'Error fetching results. Please check the debug information below.';
             })
             .finally(() => {
                 loadingOverlay.style.display = 'none';
             });
         } else {
             log('No record ID provided in URL');
-            resultsElement.textContent = 'No record ID provided. Please submit content from the main page.';
+            articleContent.textContent = 'No record ID provided. Please submit content from the main page.';
             loadingOverlay.style.display = 'none';
         }
     </script>
