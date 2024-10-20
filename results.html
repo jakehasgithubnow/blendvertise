@@ -81,6 +81,7 @@
 
         function displayResults(data) {
             const resultsElement = document.getElementById('results');
+            resultsElement.innerHTML = ''; // Clear previous results
             
             // Display original content
             const contentBox = document.createElement('div');
@@ -110,8 +111,8 @@
                         adElement.className = 'ad';
                         adElement.innerHTML = `
                             ${ad.ad_text ? `<p>${escapeHtml(ad.ad_text)}</p>` : ''}
-                            ${ad.brand ? `<p class="brand">${escapeHtml(ad.brand)}</p>` : ''}
-                            ${ad.offer ? `<p class="offer">${escapeHtml(ad.offer)}</p>` : ''}
+                            ${ad.brand ? `<p class="brand">Brand: ${escapeHtml(ad.brand)}</p>` : ''}
+                            ${ad.offer ? `<p class="offer">Offer: ${escapeHtml(ad.offer)}</p>` : ''}
                             ${ad.link ? `<p><a href="${escapeHtml(ad.link)}" target="_blank">Learn More</a></p>` : ''}
                         `;
                         adsBox.appendChild(adElement);
@@ -124,6 +125,15 @@
             }
 
             resultsElement.appendChild(adsBox);
+
+            // Debug output
+            const debugBox = document.createElement('div');
+            debugBox.className = 'content-box';
+            debugBox.innerHTML = `
+                <h2>Debug Information</h2>
+                <pre>${escapeHtml(JSON.stringify(data, null, 2))}</pre>
+            `;
+            resultsElement.appendChild(debugBox);
         }
 
         function escapeHtml(unsafe) {
