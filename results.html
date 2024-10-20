@@ -64,59 +64,47 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-        .cta-button {
-            background-color: #ff6b6b;
-            color: white;
-            border: none;
-            padding: 12px 24px;
+        .bottom-section {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        .button-column {
+            display: flex;
+            flex-direction: column;
+            width: 48%;
+        }
+        .cta-button, .try-another {
+            padding: 15px 20px;
             font-size: 18px;
             border-radius: 25px;
             cursor: pointer;
-            transition: background-color 0.3s;
-            display: block;
-            width: 100%;
-            max-width: 300px;
-            margin: 20px 0;
             text-align: center;
             text-decoration: none;
+            border: none;
+            margin-bottom: 10px;
         }
-        .cta-button:hover {
-            background-color: #ff5252;
+        .cta-button {
+            background-color: #ff6b6b;
+            color: white;
+        }
+        .try-another {
+            background-color: #f5f5f5;
+            color: #333;
         }
         .reasons-box {
+            width: 48%;
             background-color: #f5f5f5;
             padding: 20px;
             border-radius: 15px;
-            margin-top: 20px;
+            box-sizing: border-box;
         }
         .reasons-box h3 {
             margin-top: 0;
         }
         .reasons-box ul {
             padding-left: 20px;
-        }
-        .bottom-section {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            flex-wrap: wrap;
-        }
-        .try-another {
-            background-color: #f5f5f5;
-            border: none;
-            padding: 12px 24px;
-            font-size: 18px;
-            border-radius: 25px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-            display: block;
-            width: 100%;
-            max-width: 300px;
-            margin: 20px 0;
-            text-align: center;
-        }
-        .try-another:hover {
-            background-color: #e0e0e0;
+            margin-bottom: 0;
         }
     </style>
 </head>
@@ -134,8 +122,10 @@
     </div>
     
     <div class="bottom-section">
-        <a href="#" class="cta-button">Let's get started</a>
-        <button class="try-another" onclick="window.location.href='index.html'">Try another article</button>
+        <div class="button-column">
+            <a href="#" class="cta-button">Let's get started</a>
+            <button class="try-another" onclick="window.location.href='index.html'">Try another article</button>
+        </div>
         <div class="reasons-box">
             <h3>3 Reasons to work with Blendvertise</h3>
             <ul>
