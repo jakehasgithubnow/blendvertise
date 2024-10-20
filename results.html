@@ -61,13 +61,11 @@
 
             if (storedData) {
                 try {
-                    // Parse the stored data to get the actual JSON string
+                    // Parse the stored data twice to handle double-encoding
                     const jsonString = JSON.parse(storedData);
-                    console.log("Unescaped JSON string:", jsonString);  // Debug log
-                    
-                    // Now parse the actual JSON data
+                    console.log("First parse:", jsonString);  // Debug log
                     const data = JSON.parse(jsonString);
-                    console.log("Parsed data:", data);  // Debug log
+                    console.log("Second parse:", data);  // Debug log
                     displayResults(data);
                 } catch (error) {
                     console.error("Error parsing JSON:", error);  // Debug log
