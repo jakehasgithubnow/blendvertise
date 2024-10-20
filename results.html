@@ -101,9 +101,11 @@
             adsBox.className = 'content-box';
             adsBox.innerHTML = '<h2>Generated Ads</h2>';
 
+            let adCount = 0;
             if (data.ads && Array.isArray(data.ads)) {
                 data.ads.forEach(ad => {
                     if (ad.ad_text || ad.brand || ad.offer || ad.link) {
+                        adCount++;
                         const adElement = document.createElement('div');
                         adElement.className = 'ad';
                         adElement.innerHTML = `
@@ -115,7 +117,9 @@
                         adsBox.appendChild(adElement);
                     }
                 });
-            } else {
+            }
+            
+            if (adCount === 0) {
                 adsBox.innerHTML += '<p>No ads available</p>';
             }
 
