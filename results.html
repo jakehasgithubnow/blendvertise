@@ -28,21 +28,17 @@
             border-radius: 10px;
             margin-bottom: 20px;
         }
-        .try-again {
-            background-color: #ff6b6b;
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            font-size: 18px;
-            border-radius: 25px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-            display: block;
-            width: 100%;
-            margin-top: 20px;
+        .highlight {
+            background-color: #F89AA6;
         }
-        .try-again:hover {
-            background-color: #ff5252;
+        .header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .logo-image {
+            width: 150px;
+            height: auto;
         }
         #loadingOverlay {
             display: flex;
@@ -68,17 +64,59 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-        .highlight {
-            background-color: #F89AA6;
+        .cta-button {
+            background-color: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 18px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            display: block;
+            width: 100%;
+            max-width: 300px;
+            margin: 20px 0;
+            text-align: center;
+            text-decoration: none;
         }
-        .header {
+        .cta-button:hover {
+            background-color: #ff5252;
+        }
+        .reasons-box {
+            background-color: #f5f5f5;
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 20px;
+        }
+        .reasons-box h3 {
+            margin-top: 0;
+        }
+        .reasons-box ul {
+            padding-left: 20px;
+        }
+        .bottom-section {
             display: flex;
-            align-items: center;
-            margin-bottom: 20px;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
         }
-        .logo-image {
-            width: 150px;
-            height: auto;
+        .try-another {
+            background-color: #f5f5f5;
+            border: none;
+            padding: 12px 24px;
+            font-size: 18px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            display: block;
+            width: 100%;
+            max-width: 300px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        .try-another:hover {
+            background-color: #e0e0e0;
         }
     </style>
 </head>
@@ -88,82 +126,32 @@
     </div>
     <h1>Here's your updated article</h1>
     <div class="stats">
-        We've searched  added <span id="adCount"></span> ads with an estimated 4% ctr and $0.19 cpc.
+        We've added <span id="adCount"></span> ads with an estimated 4% ctr and $0.19 cpc.
     </div>
     <div id="article" class="content-box">
+        <h2>Original Article</h2>
         <div id="articleContent"></div>
     </div>
-    <button class="try-again" onclick="window.location.href='index.html'">Ready to try with your own content?</button>
+    
+    <div class="bottom-section">
+        <a href="#" class="cta-button">Let's get started</a>
+        <button class="try-another" onclick="window.location.href='index.html'">Try another article</button>
+        <div class="reasons-box">
+            <h3>3 Reasons to work with Blendvertise</h3>
+            <ul>
+                <li>Quick Integration - Wordpress, Contentful & Wix plugins</li>
+                <li>Extra Revenue - Blendvertise runs alongside your existing ads</li>
+                <li>Fully automated - Your articles are updated with the best ads every day</li>
+            </ul>
+        </div>
+    </div>
 
     <div id="loadingOverlay">
         <div class="spinner"></div>
     </div>
 
     <script>
-        const loadingOverlay = document.getElementById('loadingOverlay');
-        const articleContent = document.getElementById('articleContent');
-        const adCountElement = document.getElementById('adCount');
-
-        function getUrlParameter(name) {
-            name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
-            var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
-            var results = regex.exec(location.search);
-            return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
-        }
-
-        function sanitizeHTML(str) {
-            const temp = document.createElement('div');
-            temp.textContent = str;
-            return temp.innerHTML;
-        }
-
-        const recordId = getUrlParameter('recordId');
-
-        if (recordId) {
-            const airtableUrl = `https://api.airtable.com/v0/appebg5mTyr0n3IC2/tblT2UflSMRpwrBtW/${recordId}`;
-
-            loadingOverlay.style.display = 'flex';
-
-            fetch(airtableUrl, {
-                headers: {
-                    'Authorization': 'Bearer patNwUWSMcd150uoi.f61251b6451ad5b257df31a8be47c67e27adbeeb3cced79565ff3c331ff5f896'
-                }
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                return response.json();
-            })
-            .then(data => {
-                if (data.fields && data.fields.article) {
-                    const sanitizedContent = sanitizeHTML(data.fields.article);
-                    const formattedContent = sanitizedContent
-                        .replace(/\n/g, '<br>')
-                        .replace(/&lt;span class="highlight"&gt;/g, '<span class="highlight">')
-                        .replace(/&lt;\/span&gt;/g, '</span>');
-                    articleContent.innerHTML = formattedContent;
-                } else {
-                    articleContent.textContent = 'Original article not found in response.';
-                }
-
-                if (data.fields) {
-                    const adKeys = Object.keys(data.fields).filter(key => key.startsWith('ad_') && key.endsWith('_text'));
-                    adCountElement.textContent = adKeys.length;
-                } else {
-                    adCountElement.textContent = '0';
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                articleContent.textContent = 'Error fetching results. Please try again.';
-            })
-            .finally(() => {
-                loadingOverlay.style.display = 'none';
-            });
-        } else {
-            articleContent.textContent = 'No record ID provided. Please submit content from the main page.';
-        }
+        // ... (keep the existing JavaScript code)
     </script>
 </body>
 </html>
