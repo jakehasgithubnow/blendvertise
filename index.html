@@ -73,13 +73,20 @@
 
     <div id="sampleOptions">
         <h2>Don't have an article ready? Try a sample</h2>
-        <button class="sampleButton">Sample food article</button>
-        <button class="sampleButton">Sample banking article</button>
-        <button class="sampleButton">Sample travel article</button>
-        <button class="sampleButton">Sample health article</button>
+        <button class="sampleButton" data-sample="food">Sample food article</button>
+        <button class="sampleButton" data-sample="banking">Sample banking article</button>
+        <button class="sampleButton" data-sample="travel">Sample travel article</button>
+        <button class="sampleButton" data-sample="health">Sample health article</button>
     </div>
 
     <script>
+        const sampleArticles = {
+            food: "Discovering the Perfect Pizza: A Culinary Journey\n\nPizza, a beloved dish worldwide, has countless variations. From the classic Margherita to exotic toppings, there's a pizza for every palate. This article explores the art of pizza-making, from the crispy crust to the melted cheese, and shares tips on creating the perfect slice at home.",
+            banking: "Understanding Online Banking: Security and Convenience\n\nOnline banking has revolutionized how we manage our finances. This article delves into the benefits of digital banking, including 24/7 access to accounts, easy fund transfers, and bill payments. We also discuss essential security measures to protect your financial information in the digital age.",
+            travel: "Exploring Hidden Gems: Off the Beaten Path Travel\n\nWhile popular tourist destinations have their charm, this article focuses on lesser-known travel spots. We'll take you on a journey to secluded beaches, quaint villages, and stunning natural wonders that are often overlooked. Discover how venturing off the typical tourist trail can lead to unforgettable experiences.",
+            health: "The Power of Sleep: Unlocking Better Health\n\nSleep is a crucial component of overall health, yet it's often neglected. This article examines the science behind sleep, its impact on physical and mental well-being, and provides practical tips for improving sleep quality. Learn how small changes in your sleep habits can lead to significant improvements in your daily life."
+        };
+
         document.getElementById('webhookForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
@@ -120,6 +127,14 @@
             .catch(error => {
                 console.error('Error:', error);
                 alert('Error sending data. Please try again.');
+            });
+        });
+
+        // Add event listeners to sample buttons
+        document.querySelectorAll('.sampleButton').forEach(button => {
+            button.addEventListener('click', function() {
+                const sampleType = this.getAttribute('data-sample');
+                document.getElementById('userInput').value = sampleArticles[sampleType];
             });
         });
     </script>
