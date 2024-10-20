@@ -151,7 +151,70 @@
     </div>
 
     <script>
-        // ... (keep the existing JavaScript code)
+        const loadingOverlay = document.getElementById('loadingOverlay');
+        const articleContent = document.getElementById('articleContent');
+        const adCountElement = document.getElementById('adCount');
+
+        function getUrlParameter(name) {
+            name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+            var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+            var results = regex.exec(location.search);
+            return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+        }
+
+        function sanitizeHTML(str) {
+            const temp = document.createElement('div');
+            temp.textContent = str;
+            return temp.innerHTML;
+        }
+
+        const recordId = getUrlParameter('recordId');
+
+        if (recordId) {
+            const airtableUrl = `https://api.airtable.com/v0/appebg5mTyr0n3IC2/tblT2UflSMRpwrBtW/${recordId}`;
+
+            loadingOverlay.style.display = 'flex';
+
+            fetch(airtableUrl, {
+                headers: {
+                    'Authorization': 'Bearer patNwUWSMcd150uoi.f61251b6451ad5b257df31a8be47c67e27adbeeb3cced79565ff3c331ff5f896'
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.fields && data.fields.article) {
+                    const sanitizedContent = sanitizeHTML(data.fields.article);
+                    const formattedContent = sanitizedContent
+                        .replace(/\n/g, '<br>')
+                        .replace(/&lt;span class="highlight"&gt;/g, '<span class="highlight">')
+                        .replace(/&lt;\/span&gt;/g, '</span>');
+                    articleContent.innerHTML = formattedContent;
+                } else {
+                    articleContent.textContent = 'Original article not found in response.';
+                }
+
+                if (data.fields) {
+                    const adKeys = Object.keys(data.fields).filter(key => key.startsWith('ad_') && key.endsWith('_text'));
+                    adCountElement.textContent = adKeys.length;
+                } else {
+                    adCountElement.textContent = '0';
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                articleContent.textContent = 'Error fetching results. Please try again.';
+            })
+            .finally(() => {
+                loadingOverlay.style.display = 'none';
+            });
+        } else {
+            articleContent.textContent = 'No record ID provided. Please submit content from the main page.';
+        }
     </script>
 </body>
 </html>
