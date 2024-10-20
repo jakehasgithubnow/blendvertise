@@ -22,25 +22,13 @@
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             margin-bottom: 20px;
         }
-        #article {
-            border-left: 5px solid #4CAF50;
-        }
-        #ads {
-            border-left: 5px solid #2196F3;
-        }
-        .ad {
-            background-color: #f9f9f9;
-            padding: 15px;
-            margin-bottom: 10px;
-            border-radius: 10px;
-        }
         .stats {
             background-color: #e9e9e9;
             padding: 10px;
             border-radius: 10px;
             margin-bottom: 20px;
         }
-        .logo {
+        .logo-text {
             font-size: 2em;
             color: #ff6b6b;
             margin-bottom: 20px;
@@ -86,12 +74,25 @@
             100% { transform: rotate(360deg); }
         }
         .highlight {
-            background-color: #FEF3F7;
+            background-color: #F89AA6;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .logo-image {
+            width: 100px;
+            height: auto;
         }
     </style>
 </head>
 <body>
-    <div class="logo">Blendvertise</div>
+    <div class="header">
+        <div class="logo-text">Blendvertise</div>
+        <img src="https://blendvertise.carrd.co/assets/images/image03.png?v=9ef200d0" alt="Blendvertise Logo" class="logo-image">
+    </div>
     <h1>Here's your updated article</h1>
     <div class="stats">
         We've added <span id="adCount"></span> ads with an estimated 4% ctr and $0.19 cpc.
@@ -99,10 +100,6 @@
     <div id="article" class="content-box">
         <h2>Original Article</h2>
         <div id="articleContent"></div>
-    </div>
-    <div id="ads" class="content-box">
-        <h2>Generated Ads</h2>
-        <div id="adsContent"></div>
     </div>
     <button class="try-again" onclick="window.location.href='index.html'">Ready to try with your own content?</button>
 
@@ -113,7 +110,6 @@
     <script>
         const loadingOverlay = document.getElementById('loadingOverlay');
         const articleContent = document.getElementById('articleContent');
-        const adsContent = document.getElementById('adsContent');
         const adCountElement = document.getElementById('adCount');
 
         function getUrlParameter(name) {
@@ -162,25 +158,8 @@
                 if (data.fields) {
                     const adKeys = Object.keys(data.fields).filter(key => key.startsWith('ad_') && key.endsWith('_text'));
                     adCountElement.textContent = adKeys.length;
-                    
-                    if (adKeys.length > 0) {
-                        adKeys.forEach((adKey, index) => {
-                            const adNumber = adKey.split('_')[1];
-                            const adDiv = document.createElement('div');
-                            adDiv.className = 'ad';
-                            adDiv.innerHTML = `
-                                <strong>Ad ${adNumber}:</strong><br>
-                                Text: ${sanitizeHTML(data.fields[`ad_${adNumber}_text`]) || 'N/A'}<br>
-                                Brand: ${sanitizeHTML(data.fields[`ad_${adNumber}_brand`]) || 'N/A'}<br>
-                                Offer: ${sanitizeHTML(data.fields[`ad_${adNumber}_offer`]) || 'N/A'}
-                            `;
-                            adsContent.appendChild(adDiv);
-                        });
-                    } else {
-                        adsContent.textContent = 'No generated ads found in response.';
-                    }
                 } else {
-                    adsContent.textContent = 'No data fields found in response.';
+                    adCountElement.textContent = '0';
                 }
             })
             .catch(error => {
