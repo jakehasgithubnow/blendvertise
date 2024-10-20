@@ -137,13 +137,13 @@
                 },
                 body: jsonData
             })
-            .then(response => response.json())
+            .then(response => response.text())  // Changed to .text() instead of .json()
             .then(data => {
-                if (data && Array.isArray(data) && data.length > 0 && data[0].body) {
-                    const airtableRecordId = data[0].body;
+                if (data && data.trim()) {
+                    const airtableRecordId = data.trim();
                     window.location.href = `results.html?recordId=${airtableRecordId}`;
                 } else {
-                    throw new Error('Invalid response format');
+                    throw new Error('No Airtable record ID received');
                 }
             })
             .catch(error => {
