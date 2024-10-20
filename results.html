@@ -61,12 +61,15 @@
 
             if (storedData) {
                 try {
-                    // Parse the stored data twice to handle double-encoding
-                    const jsonString = JSON.parse(storedData);
-                    console.log("First parse:", jsonString);  // Debug log
-                    const data = JSON.parse(jsonString);
-                    console.log("Second parse:", data);  // Debug log
-                    displayResults(data);
+                    // Parse the stored data
+                    const parsedData = JSON.parse(storedData);
+                    console.log("Parsed stored data:", parsedData);  // Debug log
+
+                    // Extract the body from the first item in the array
+                    const bodyData = JSON.parse(parsedData[0].body);
+                    console.log("Extracted body data:", bodyData);  // Debug log
+
+                    displayResults(bodyData);
                 } catch (error) {
                     console.error("Error parsing JSON:", error);  // Debug log
                     resultsElement.innerHTML = `
