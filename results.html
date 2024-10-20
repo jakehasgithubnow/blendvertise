@@ -18,7 +18,7 @@
         .content-box {
             background-color: #fff;
             padding: 20px;
-            border-radius: 8px;
+            border-radius: 15px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             margin-bottom: 20px;
         }
@@ -32,44 +32,43 @@
             background-color: #f9f9f9;
             padding: 15px;
             margin-bottom: 10px;
-            border-radius: 5px;
+            border-radius: 10px;
         }
-        #debug {
-            white-space: pre-wrap;
-            word-wrap: break-word;
-            background-color: #f0f0f0;
-            font-family: monospace;
+        .stats {
+            background-color: #e9e9e9;
             padding: 10px;
-            border-radius: 5px;
+            border-radius: 10px;
+            margin-bottom: 20px;
         }
-        #loadingOverlay {
-            display: flex;
-            position: fixed;
-            top: 0;
-            left: 0;
+        .logo {
+            font-size: 2em;
+            color: #ff6b6b;
+            margin-bottom: 20px;
+        }
+        .try-again {
+            background-color: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 18px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            display: block;
             width: 100%;
-            height: 100%;
-            background-color: rgba(255, 255, 255, 0.8);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
+            margin-top: 20px;
         }
-        .spinner {
-            width: 50px;
-            height: 50px;
-            border: 5px solid #ff6b6b;
-            border-top: 5px solid #f5f5f5;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        .try-again:hover {
+            background-color: #ff5252;
         }
     </style>
 </head>
 <body>
-    <h1>Blendvertise Results</h1>
+    <div class="logo">Blendvertise</div>
+    <h1>Here's your updated article</h1>
+    <div class="stats">
+        We've added <span id="adCount"></span> ads with an estimated 4% ctr and $0.19 cpc.
+    </div>
     <div id="article" class="content-box">
         <h2>Original Article</h2>
         <div id="articleContent"></div>
@@ -78,21 +77,12 @@
         <h2>Generated Ads</h2>
         <div id="adsContent"></div>
     </div>
-    <div id="debug">Debug information will appear here...</div>
-    <div id="loadingOverlay">
-        <div class="spinner"></div>
-    </div>
+    <button class="try-again" onclick="window.location.href='index.html'">Ready to try with your own content?</button>
 
     <script>
-        const loadingOverlay = document.getElementById('loadingOverlay');
         const articleContent = document.getElementById('articleContent');
         const adsContent = document.getElementById('adsContent');
-        const debugElement = document.getElementById('debug');
-
-        function log(message) {
-            console.log(message);
-            debugElement.textContent += message + '\n';
-        }
+        const adCountElement = document.getElementById('adCount');
 
         function getUrlParameter(name) {
             name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
@@ -102,11 +92,9 @@
         }
 
         const recordId = getUrlParameter('recordId');
-        log(`Record ID: ${recordId}`);
 
         if (recordId) {
             const airtableUrl = `https://api.airtable.com/v0/appebg5mTyr0n3IC2/tblT2UflSMRpwrBtW/${recordId}`;
-            log(`Fetching data from: ${airtableUrl}`);
 
             fetch(airtableUrl, {
                 headers: {
@@ -114,16 +102,12 @@
                 }
             })
             .then(response => {
-                log(`Response status: ${response.status}`);
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
                 return response.json();
             })
             .then(data => {
-                log('Received data:');
-                log(JSON.stringify(data, null, 2));
-
                 if (data.fields && data.fields.article) {
                     articleContent.textContent = data.fields.article;
                 } else {
@@ -132,6 +116,8 @@
 
                 if (data.fields) {
                     const adKeys = Object.keys(data.fields).filter(key => key.startsWith('ad_') && key.endsWith('_text'));
+                    adCountElement.textContent = adKeys.length;
+                    
                     if (adKeys.length > 0) {
                         adKeys.forEach((adKey, index) => {
                             const adNumber = adKey.split('_')[1];
@@ -154,16 +140,10 @@
             })
             .catch(error => {
                 console.error('Error:', error);
-                log(`Error: ${error.message}`);
-                articleContent.textContent = 'Error fetching results. Please check the debug information below.';
-            })
-            .finally(() => {
-                loadingOverlay.style.display = 'none';
+                articleContent.textContent = 'Error fetching results. Please try again.';
             });
         } else {
-            log('No record ID provided in URL');
             articleContent.textContent = 'No record ID provided. Please submit content from the main page.';
-            loadingOverlay.style.display = 'none';
         }
     </script>
 </body>
