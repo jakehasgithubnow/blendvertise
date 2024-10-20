@@ -154,7 +154,8 @@
             })
             .then(response => response.text())
             .then(data => {
-                localStorage.setItem('webhookResponse', data);
+                // Escape the JSON string before storing
+                localStorage.setItem('webhookResponse', JSON.stringify(data));
                 window.location.href = 'results.html';
             })
             .catch(error => {
