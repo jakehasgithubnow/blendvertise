@@ -53,18 +53,6 @@
     <div id="results"></div>
 
     <script>
-        function unescapeJson(str) {
-            return str.replace(/\\n/g, "\n")
-                      .replace(/\\'/g, "'")
-                      .replace(/\\"/g, '"')
-                      .replace(/\\&/g, "&")
-                      .replace(/\\r/g, "\r")
-                      .replace(/\\t/g, "\t")
-                      .replace(/\\b/g, "\b")
-                      .replace(/\\f/g, "\f")
-                      .replace(/\\\\/g, "\\");
-        }
-
         document.addEventListener('DOMContentLoaded', function() {
             const storedData = localStorage.getItem('webhookResponse');
             const resultsElement = document.getElementById('results');
@@ -73,13 +61,11 @@
 
             if (storedData) {
                 try {
-                    // Unescape and parse the stored data
-                    const unescapedData = unescapeJson(storedData);
-                    console.log("Unescaped data:", unescapedData);  // Debug log
-                    const parsedData = JSON.parse(unescapedData);
-                    console.log("Parsed data:", parsedData);  // Debug log
+                    // Parse the stored data
+                    const data = JSON.parse(storedData);
+                    console.log("Parsed data:", data);  // Debug log
 
-                    displayResults(parsedData);
+                    displayResults(data);
                 } catch (error) {
                     console.error("Error parsing JSON:", error);  // Debug log
                     resultsElement.innerHTML = `
