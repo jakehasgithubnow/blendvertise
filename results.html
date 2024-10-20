@@ -140,7 +140,7 @@
             })
             .then(data => {
                 if (data.fields && data.fields.article) {
-                    articleContent.textContent = data.fields.article;
+                articleContent.innerHTML = data.fields.article.replace(/\n/g, '<br>');
                 } else {
                     articleContent.textContent = 'Original article not found in response.';
                 }
