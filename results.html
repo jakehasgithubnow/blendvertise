@@ -58,7 +58,12 @@
 
             if (storedData) {
                 try {
-                    const data = JSON.parse(storedData);
+                    // Parse the stored data to get the actual JSON string
+                    const jsonString = JSON.parse(storedData);
+                    console.log("Unescaped JSON string:", jsonString);  // Debug log
+                    
+                    // Now parse the actual JSON data
+                    const data = JSON.parse(jsonString);
                     console.log("Parsed data:", data);  // Debug log
                     displayResults(data);
                 } catch (error) {
