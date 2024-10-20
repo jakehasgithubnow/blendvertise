@@ -35,6 +35,14 @@
         .offer {
             font-style: italic;
         }
+        .error {
+            color: #ff0000;
+            font-weight: bold;
+        }
+        pre {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
     </style>
 </head>
 <body>
@@ -46,12 +54,19 @@
             const storedData = localStorage.getItem('webhookResponse');
             const resultsElement = document.getElementById('results');
             
+            console.log("Stored data:", storedData);  // Debug log
+
             if (storedData) {
                 try {
                     const data = JSON.parse(storedData);
+                    console.log("Parsed data:", data);  // Debug log
                     displayResults(data);
                 } catch (error) {
-                    resultsElement.textContent = 'Error parsing the response data.';
+                    console.error("Error parsing JSON:", error);  // Debug log
+                    resultsElement.innerHTML = `
+                        <div class="error">Error parsing the response data. See raw data below:</div>
+                        <pre>${escapeHtml(storedData)}</pre>
+                    `;
                 }
                 localStorage.removeItem('webhookResponse');
             } else {
@@ -67,7 +82,7 @@
             contentBox.className = 'content-box';
             contentBox.innerHTML = `
                 <h2>Original Content</h2>
-                <p>${data.article.content[0].sentence_content}</p>
+                <p>${escapeHtml(data.article.content[0].sentence_content)}</p>
             `;
             resultsElement.appendChild(contentBox);
 
@@ -81,15 +96,24 @@
                     const adElement = document.createElement('div');
                     adElement.className = 'ad';
                     adElement.innerHTML = `
-                        <p>${ad.ad_text}</p>
-                        <p class="brand">${ad.brand}</p>
-                        <p class="offer">${ad.offer}</p>
+                        <p>${escapeHtml(ad.ad_text)}</p>
+                        <p class="brand">${escapeHtml(ad.brand)}</p>
+                        <p class="offer">${escapeHtml(ad.offer)}</p>
                     `;
                     adsBox.appendChild(adElement);
                 }
             });
 
             resultsElement.appendChild(adsBox);
+        }
+
+        function escapeHtml(unsafe) {
+            return unsafe
+                 .replace(/&/g, "&amp;")
+                 .replace(/</g, "&lt;")
+                 .replace(/>/g, "&gt;")
+                 .replace(/"/g, "&quot;")
+                 .replace(/'/g, "&#039;");
         }
     </script>
 </body>
