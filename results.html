@@ -106,6 +106,32 @@
             padding-left: 20px;
             margin-bottom: 0;
         }
+        .banner {
+            display: flex;
+            justify-content: space-between;
+            background-color: #FFF0F0;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .banner-item {
+            flex: 1;
+            text-align: center;
+            padding: 0 10px;
+        }
+        .banner-item:not(:last-child) {
+            border-right: 1px solid #FFD6D6;
+        }
+        .banner-item h3 {
+            margin: 0 0 10px 0;
+            color: #FF6B6B;
+        }
+        .banner-item p {
+            margin: 0;
+            font-size: 14px;
+            color: #666;
+        }
     </style>
 </head>
 <body>
@@ -116,6 +142,22 @@
     <div class="stats">
         We've added <span id="adCount"></span> ads with an estimated 4% ctr and $0.19 cpc.
     </div>
+    
+    <div class="banner">
+        <div class="banner-item">
+            <h3>3,450 Ads Checked</h3>
+            <p>We've searched all of the major affiliate networks to find the ads that will perform best in your content.</p>
+        </div>
+        <div class="banner-item">
+            <h3>Automatic, always up to date</h3>
+            <p>Install our Wordpress, Contentful or Wix plugin to get started. Your articles are updated daily.</p>
+        </div>
+        <div class="banner-item">
+            <h3>You're in control</h3>
+            <p>You choose which brands to advertise, ad topics and ad density.</p>
+        </div>
+    </div>
+    
     <div id="article" class="content-box">
         <h2>Original Article</h2>
         <div id="articleContent"></div>
