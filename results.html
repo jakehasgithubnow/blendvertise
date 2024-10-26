@@ -219,21 +219,26 @@
                 return response.json();
             })
             .then(data => {
-                if (data.fields && data.fields.article) {
-                    const sanitizedContent = sanitizeHTML(data.fields.article);
-                    const formattedContent = sanitizedContent
-                        .replace(/\n/g, '<br>')
-                        .replace(/&lt;span class="highlight"&gt;/g, '<span class="highlight">')
-                        .replace(/&lt;\/span&gt;/g, '</span>');
-                    articleContent.innerHTML = formattedContent;
-                } else {
-                    articleContent.textContent = 'Original article not found in response.';
-                }
+                // Handle the new response format
+                if (Array.isArray(data) && data.length > 0 && data[0].fields) {
+                    const fields = data[0].fields;
+                    if (fields.article) {
+                        const sanitizedContent = sanitizeHTML(fields.article);
+                        const formattedContent = sanitizedContent
+                            .replace(/\n/g, '<br>')
+                            .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank">$1</a>')
+                            .replace(/&lt;span class="highlight"&gt;/g, '<span class="highlight">')
+                            .replace(/&lt;\/span&gt;/g, '</span>');
+                        articleContent.innerHTML = formattedContent;
+                    } else {
+                        articleContent.textContent = 'Original article not found in response.';
+                    }
 
-                if (data.fields) {
-                    const adKeys = Object.keys(data.fields).filter(key => key.startsWith('ad_') && key.endsWith('_text'));
+                    // Count ads by looking for ad_*_text fields
+                    const adKeys = Object.keys(fields).filter(key => key.startsWith('ad_') && key.endsWith('_text'));
                     adCountElement.textContent = adKeys.length;
                 } else {
+                    articleContent.textContent = 'Invalid response format received.';
                     adCountElement.textContent = '0';
                 }
             })
