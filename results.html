@@ -200,7 +200,17 @@
             return temp.innerHTML;
         }
 
-        const recordId = getUrlParameter('recordId');
+        let recordId = getUrlParameter('recordId');
+
+        // Try to parse the recordId if it's a JSON string
+        try {
+            const parsedData = JSON.parse(recordId);
+            if (Array.isArray(parsedData) && parsedData.length > 0 && parsedData[0].body) {
+                recordId = parsedData[0].body;
+            }
+        } catch (e) {
+            console.log('RecordId is not in JSON format, using as is');
+        }
 
         if (recordId) {
             const airtableUrl = `https://api.airtable.com/v0/appebg5mTyr0n3IC2/tblT2UflSMRpwrBtW/${recordId}`;
