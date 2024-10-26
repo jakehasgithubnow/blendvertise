@@ -41,7 +41,7 @@
             height: auto;
         }
         #loadingOverlay {
-            display: flex;
+            display: none;
             position: fixed;
             top: 0;
             left: 0;
@@ -63,6 +63,32 @@
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
+        }
+        .banner {
+            display: flex;
+            justify-content: space-between;
+            background-color: #FFF0F0;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .banner-item {
+            flex: 1;
+            text-align: center;
+            padding: 0 10px;
+        }
+        .banner-item:not(:last-child) {
+            border-right: 1px solid #FFD6D6;
+        }
+        .banner-item h3 {
+            margin: 0 0 10px 0;
+            color: #FF6B6B;
+        }
+        .banner-item p {
+            margin: 0;
+            font-size: 14px;
+            color: #666;
         }
         .bottom-section {
             display: flex;
@@ -105,32 +131,6 @@
         .reasons-box ul {
             padding-left: 20px;
             margin-bottom: 0;
-        }
-        .banner {
-            display: flex;
-            justify-content: space-between;
-            background-color: #FFF0F0;
-            padding: 20px;
-            border-radius: 15px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        .banner-item {
-            flex: 1;
-            text-align: center;
-            padding: 0 10px;
-        }
-        .banner-item:not(:last-child) {
-            border-right: 1px solid #FFD6D6;
-        }
-        .banner-item h3 {
-            margin: 0 0 10px 0;
-            color: #FF6B6B;
-        }
-        .banner-item p {
-            margin: 0;
-            font-size: 14px;
-            color: #666;
         }
     </style>
 </head>
@@ -200,17 +200,8 @@
             return temp.innerHTML;
         }
 
-        let recordId = getUrlParameter('recordId');
-
-        // Try to parse the recordId if it's a JSON string
-        try {
-            const parsedData = JSON.parse(recordId);
-            if (Array.isArray(parsedData) && parsedData.length > 0 && parsedData[0].body) {
-                recordId = parsedData[0].body;
-            }
-        } catch (e) {
-            console.log('RecordId is not in JSON format, using as is');
-        }
+        // Get the record ID directly from the URL
+        const recordId = getUrlParameter('recordId');
 
         if (recordId) {
             const airtableUrl = `https://api.airtable.com/v0/appebg5mTyr0n3IC2/tblT2UflSMRpwrBtW/${recordId}`;
@@ -229,32 +220,30 @@
                 return response.json();
             })
             .then(data => {
-                // Handle the new response format
-                if (Array.isArray(data) && data.length > 0 && data[0].fields) {
-                    const fields = data[0].fields;
-                    if (fields.article) {
-                        const sanitizedContent = sanitizeHTML(fields.article);
+                console.log('Airtable response:', data); // Debug log
+                
+                if (data && data.fields) {
+                    if (data.fields.article) {
+                        const sanitizedContent = sanitizeHTML(data.fields.article);
                         const formattedContent = sanitizedContent
                             .replace(/\n/g, '<br>')
                             .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank">$1</a>')
                             .replace(/&lt;span class="highlight"&gt;/g, '<span class="highlight">')
                             .replace(/&lt;\/span&gt;/g, '</span>');
                         articleContent.innerHTML = formattedContent;
-                    } else {
-                        articleContent.textContent = 'Original article not found in response.';
                     }
 
-                    // Count ads by looking for ad_*_text fields
-                    const adKeys = Object.keys(fields).filter(key => key.startsWith('ad_') && key.endsWith('_text'));
+                    // Count the number of ad fields
+                    const adKeys = Object.keys(data.fields).filter(key => key.startsWith('ad_') && key.endsWith('_text'));
                     adCountElement.textContent = adKeys.length;
                 } else {
-                    articleContent.textContent = 'Invalid response format received.';
-                    adCountElement.textContent = '0';
+                    throw new Error('Invalid response format from Airtable');
                 }
             })
             .catch(error => {
                 console.error('Error:', error);
                 articleContent.textContent = 'Error fetching results. Please try again.';
+                adCountElement.textContent = '0';
             })
             .finally(() => {
                 loadingOverlay.style.display = 'none';
