@@ -139,38 +139,33 @@
         .cta-button, .try-another {
             display: inline-block;
             width: 100%;
-            text-decoration: none;
             padding: 1rem 2rem;
             font-family: 'Work Sans', sans-serif;
             font-size: 1.5em;
             font-weight: 500;
-            border-radius: 1rem;
             border: none;
             cursor: pointer;
             text-align: center;
+            text-decoration: none;
             transition: transform 0.25s ease;
             margin-bottom: 1rem;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border-radius: 0.75rem;
         }
 
         .cta-button {
             background-color: #E75757;
-            color: #FFFFFF;
-        }
-
-        .cta-button:hover {
-            transform: scale(1.0425);
-            background-color: #ff6b6b;
+            color: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
         .try-another {
-            background-color: #f5f5f5;
-            color: #5E5653;
+            background-color: #F0F0F0;
+            color: #47403E;
+            box-shadow: none;
         }
 
-        .try-another:hover {
+        .cta-button:hover, .try-another:hover {
             transform: scale(1.0425);
-            background-color: #e9e9e9;
         }
 
         .reasons-box {
@@ -295,18 +290,12 @@
         <div id="articleContent"></div>
     </div>
     
-    <div class="bottom-section">
-        <div class="button-column">
-            <a href="#" class="cta-button">Let's get started</a>
-            <button class="try-another" onclick="window.location.href='index.html'">Try another article</button>
+    <div style="display: flex; gap: 2rem; margin-top: 2rem;">
+        <div style="background-color: #E75757; padding: 1rem 2rem; border-radius: 0.75rem; flex: 1;">
+            <a href="#" style="color: white; text-decoration: none; display: block; width: 100%; text-align: center; font-family: 'Work Sans', sans-serif; font-size: 1.5em; font-weight: 500;">Let's get started</a>
         </div>
-        <div class="reasons-box">
-            <h3>3 Reasons to work with Blendvertise</h3>
-            <ul>
-                <li>Quick Integration - Wordpress, Contentful & Wix plugins</li>
-                <li>Extra Revenue - Blendvertise runs alongside your existing ads</li>
-                <li>Fully automated - Your articles are updated with the best ads every day</li>
-            </ul>
+        <div style="background-color: #F0F0F0; padding: 1rem 2rem; border-radius: 0.75rem; flex: 1;">
+            <button onclick="window.location.href='index.html'" style="background: none; border: none; color: #47403E; font-family: 'Work Sans', sans-serif; font-size: 1.5em; font-weight: 500; width: 100%; cursor: pointer; padding: 0;">Try another article</button>
         </div>
     </div>
 
