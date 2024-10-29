@@ -57,7 +57,7 @@
         }
 
         .logo-image {
-            width: 150px;
+            width: 195px; /* Increased by 30% from 150px */
             height: auto;
         }
 
@@ -73,13 +73,31 @@
 
         .stats {
             background-color: #F69BA4;
-            padding: 20px; /* Increased padding */
+            padding: 20px;
             border-radius: 10px;
             margin-bottom: 20px;
             color: #47403E;
             font-family: 'Inter', sans-serif;
             font-weight: 300;
-            line-height: 1.4; /* Improved readability */
+            line-height: 1.4;
+        }
+
+        /* Added markdown styles for stats description */
+        .stats p {
+            margin: 0.5em 0;
+        }
+
+        .stats strong {
+            font-weight: 600;
+        }
+
+        .stats em {
+            font-style: italic;
+        }
+
+        .stats a {
+            color: #47403E;
+            text-decoration: underline;
         }
 
         .highlight {
@@ -150,6 +168,11 @@
             cursor: pointer;
             border: none;
             -webkit-tap-highlight-color: transparent;
+            /* Added for vertical centering */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 52px;
         }
 
         .fab:active {
@@ -268,6 +291,7 @@
         <div class="spinner"></div>
     </div>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.0.2/marked.min.js"></script>
     <script>
         const loadingOverlay = document.getElementById('loadingOverlay');
         const articleContent = document.getElementById('articleContent');
@@ -312,7 +336,8 @@
             .then(data => {
                 if (data && data.fields) {
                     if (data.fields.description) {
-                        statsDescription.textContent = data.fields.description;
+                        // Parse markdown in description
+                        statsDescription.innerHTML = marked.parse(data.fields.description);
                     } else {
                         statsDescription.textContent = 'Analysis complete';
                     }
