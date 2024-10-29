@@ -291,15 +291,7 @@
         <div class="spinner"></div>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.0.2/marked.min.js"></script>
     <script>
-        // Initialize marked with options
-        marked.setOptions({
-            breaks: true,
-            gfm: true,
-            headerIds: false,
-            mangle: false
-        });
 
         const loadingOverlay = document.getElementById('loadingOverlay');
         const articleContent = document.getElementById('articleContent');
@@ -344,15 +336,9 @@
             .then(data => {
                 if (data && data.fields) {
                     if (data.fields.description) {
-                        try {
-                            // Parse markdown in description and sanitize
-                            const markedContent = marked.parse(data.fields.description);
-                            console.log('Parsed markdown:', markedContent); // Debug log
-                            statsDescription.innerHTML = markedContent;
-                        } catch (error) {
-                            console.error('Error parsing markdown:', error);
-                            statsDescription.textContent = data.fields.description;
-                        }
+                        // Simply replace **text** with <strong>text</strong>
+                        const withBold = data.fields.description.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+                        statsDescription.innerHTML = withBold;
                     } else {
                         statsDescription.textContent = 'Analysis complete';
                     }
