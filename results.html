@@ -257,7 +257,6 @@
             .cta-button, .try-another {
                 margin-bottom: 1rem;
             }}
-        }
     </style>
 </head>
 <body>
@@ -266,8 +265,8 @@
         <img src="https://blendvertise.carrd.co/assets/images/image03.png?v=9ef200d0" alt="Blendvertise Logo" class="logo-image">
     </div>
     <h1>Here's your updated article</h1>
-    <div class="stats">
-        We've added <span id="adCount"></span> ads with an estimated 4% ctr and $0.19 cpc.
+    <div class="stats" id="statsDescription">
+        <!-- Description will be populated from Airtable -->
     </div>
     
     <div class="banner">
@@ -306,7 +305,7 @@
     <script>
         const loadingOverlay = document.getElementById('loadingOverlay');
         const articleContent = document.getElementById('articleContent');
-        const adCountElement = document.getElementById('adCount');
+        const statsDescription = document.getElementById('statsDescription');
 
         function getUrlParameter(name) {
             name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
@@ -342,6 +341,13 @@
             })
             .then(data => {
                 if (data && data.fields) {
+                    // Update the description from Airtable
+                    if (data.fields.description) {
+                        statsDescription.textContent = data.fields.description;
+                    } else {
+                        statsDescription.textContent = 'Analysis complete';
+                    }
+
                     if (data.fields.article) {
                         const sanitizedContent = sanitizeHTML(data.fields.article);
                         const formattedContent = sanitizedContent
@@ -351,10 +357,6 @@
                             .replace(/&lt;\/span&gt;/g, '</span>');
                         articleContent.innerHTML = formattedContent;
                     }
-
-                    // Count the number of ad fields
-                    const adKeys = Object.keys(data.fields).filter(key => key.startsWith('ad_') && key.endsWith('_text'));
-                    adCountElement.textContent = adKeys.length;
                 } else {
                     throw new Error('Invalid response format from Airtable');
                 }
@@ -362,13 +364,14 @@
             .catch(error => {
                 console.error('Error:', error);
                 articleContent.textContent = 'Error fetching results. Please try again.';
-                adCountElement.textContent = '0';
+                statsDescription.textContent = 'Error loading results';
             })
             .finally(() => {
                 loadingOverlay.style.display = 'none';
             });
         } else {
             articleContent.textContent = 'No record ID provided. Please submit content from the main page.';
+            statsDescription.textContent = 'Missing article ID';
         }
     </script>
     </div>
