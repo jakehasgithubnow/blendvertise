@@ -4,7 +4,200 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Blendvertise Results</title>
-    <!-- Previous styles remain the same -->
+    <link href="https://fonts.googleapis.com/css2?display=swap&family=Wix+Madefor+Text:ital,wght@0,800;1,800&family=Inter:ital,wght@0,300;1,300&family=Work+Sans:ital,wght@0,500;0,600;1,500;1,600" rel="stylesheet" type="text/css" />
+    <style>
+        :root {
+            --background-height: 100vh;
+            --viewport-height: 100vh;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: white;
+        }
+
+        h1, h2 {
+            color: #333;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .logo-image {
+            width: 150px;
+            height: auto;
+        }
+
+        .content-box {
+            background-color: #f5f5f5;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .stats {
+            background-color: #e9e9e9;
+            padding: 10px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .highlight {
+            background-color: #F89AA6;
+        }
+
+        .banner {
+            display: flex;
+            justify-content: space-between;
+            background-color: #FFF0F0;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .banner-item {
+            flex: 1;
+            text-align: center;
+            padding: 0 10px;
+        }
+
+        .banner-item:not(:last-child) {
+            border-right: 1px solid #FFD6D6;
+        }
+
+        .banner-item h3 {
+            margin: 0 0 10px 0;
+            color: #FF6B6B;
+        }
+
+        .banner-item p {
+            margin: 0;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .bottom-section {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .button-column {
+            display: flex;
+            flex-direction: column;
+            width: 48%;
+        }
+
+        .cta-button, .try-another {
+            padding: 15px 20px;
+            font-size: 18px;
+            border-radius: 25px;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            border: none;
+            margin-bottom: 10px;
+        }
+
+        .cta-button {
+            background-color: #ff6b6b;
+            color: white;
+        }
+
+        .try-another {
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        .reasons-box {
+            width: 48%;
+            background-color: #f5f5f5;
+            padding: 20px;
+            border-radius: 15px;
+            box-sizing: border-box;
+        }
+
+        .reasons-box h3 {
+            margin-top: 0;
+        }
+
+        .reasons-box ul {
+            padding-left: 20px;
+            margin-bottom: 0;
+        }
+
+        #loadingOverlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #ff6b6b;
+            border-top: 5px solid #f5f5f5;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 736px) {
+            html {
+                font-size: 11pt;
+            }
+
+            #main {
+                --alignment: center;
+                --flex-alignment: center;
+                --indent-left: 1;
+                --indent-right: 1;
+                --margin-left: auto;
+                --margin-right: auto;
+            }
+
+            .banner {
+                flex-direction: column;
+            }
+
+            .banner-item {
+                padding: 10px 0;
+                border-right: none;
+                border-bottom: 1px solid #FFD6D6;
+            }
+
+            .banner-item:last-child {
+                border-bottom: none;
+            }
+
+            .bottom-section {
+                flex-direction: column;
+            }
+
+            .button-column, .reasons-box {
+                width: 100%;
+            }
+        }
+    </style>
 </head>
 <body>
     <div class="content-wrapper">
@@ -16,7 +209,44 @@
             <!-- Description will be inserted here by JavaScript -->
         </div>
         
-        <!-- Rest of the HTML remains the same -->
+        <div class="banner">
+            <div class="banner-item">
+                <h3>3,450 Ads Checked</h3>
+                <p>We've searched all of the major affiliate networks to find the ads that will perform best in your content.</p>
+            </div>
+            <div class="banner-item">
+                <h3>Automatic, always up to date</h3>
+                <p>Install our Wordpress, Contentful or Wix plugin to get started. Your articles are updated daily.</p>
+            </div>
+            <div class="banner-item">
+                <h3>You're in control</h3>
+                <p>You choose which brands to advertise, ad topics and ad density.</p>
+            </div>
+        </div>
+        
+        <div id="article" class="content-box">
+            <h2>Original Article</h2>
+            <div id="articleContent"></div>
+        </div>
+        
+        <div class="bottom-section">
+            <div class="button-column">
+                <a href="#" class="cta-button">Let's get started</a>
+                <button class="try-another" onclick="window.location.href='index.html'">Try another article</button>
+            </div>
+            <div class="reasons-box">
+                <h3>3 Reasons to work with Blendvertise</h3>
+                <ul>
+                    <li>Quick Integration - Wordpress, Contentful & Wix plugins</li>
+                    <li>Extra Revenue - Blendvertise runs alongside your existing ads</li>
+                    <li>Fully automated - Your articles are updated with the best ads every day</li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="loadingOverlay">
+            <div class="spinner"></div>
+        </div>
 
         <script>
             const loadingOverlay = document.getElementById('loadingOverlay');
