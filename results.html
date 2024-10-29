@@ -4,42 +4,191 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Blendvertise Results</title>
+    <link href="https://fonts.googleapis.com/css2?display=swap&family=Wix+Madefor+Text:ital,wght@0,800;1,800&family=Inter:ital,wght@0,300;1,300&family=Work+Sans:ital,wght@0,500;0,600;1,500;1,600" rel="stylesheet" type="text/css" />
     <style>
+        :root {
+            --background-height: 100vh;
+            --viewport-height: 100vh;
+        }
+
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Inter', sans-serif;
             max-width: 800px;
             margin: 0 auto;
             padding: 20px;
-            background-color: white;
+            background-color: #FFFFFF;
+            line-height: 1.0;
+            min-height: var(--viewport-height);
+            min-width: 320px;
+            overflow-x: hidden;
+            word-wrap: break-word;
         }
+
+        body:before {
+            background-attachment: scroll;
+            content: '';
+            display: block;
+            height: var(--background-height);
+            left: 0;
+            pointer-events: none;
+            position: fixed;
+            top: 0;
+            transform: scale(1);
+            width: 100vw;
+            z-index: 0;
+            background-image: radial-gradient(circle, rgba(191,191,191,0.502) 1.5px, transparent 1.5px);
+            background-size: 24px 24px;
+            background-position: center;
+            background-repeat: repeat;
+            opacity: 0.5;
+        }
+
+        body {
+            position: relative;
+            z-index: 1;
+        }
+
+        .content-wrapper {
+            position: relative;
+            z-index: 2;
+        }
+
         h1, h2 {
-            color: #333;
+            font-family: 'Wix Madefor Text', sans-serif;
+            color: #47403E;
+            font-weight: 800;
+            line-height: 1.125;
         }
-        .content-box {
-            background-color: #f5f5f5;
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
-        }
-        .stats {
-            background-color: #e9e9e9;
-            padding: 10px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-        }
-        .highlight {
-            background-color: #F89AA6;
-        }
-        .header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 20px;
-        }
+
         .logo-image {
             width: 150px;
             height: auto;
         }
+
+        .content-box {
+            background-color: #FDE6E8;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .stats {
+            background-color: #F69BA4;
+            padding: 10px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            color: #47403E;
+            font-family: 'Inter', sans-serif;
+            font-weight: 300;
+        }
+
+        .highlight {
+            background-color: #F89AA6;
+        }
+
+        .banner {
+            display: flex;
+            justify-content: space-between;
+            background-color: #FFF0F0;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .banner-item {
+            flex: 1;
+            text-align: center;
+            padding: 0 10px;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .banner-item:not(:last-child) {
+            border-right: 1px solid #FFD6D6;
+        }
+
+        .banner-item h3 {
+            margin: 0 0 10px 0;
+            color: #FF6B6B;
+            font-family: 'Wix Madefor Text', sans-serif;
+            font-weight: 800;
+        }
+
+        .banner-item p {
+            margin: 0;
+            font-size: 14px;
+            color: #5E5653;
+            font-weight: 300;
+        }
+
+        .bottom-section {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .button-column {
+            display: flex;
+            flex-direction: column;
+            width: 48%;
+        }
+
+        .cta-button, .try-another {
+            display: inline-block;
+            width: 100%;
+            padding: 1rem 2rem;
+            font-family: 'Work Sans', sans-serif;
+            font-size: 1.5em;
+            font-weight: 500;
+            border: none;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            transition: transform 0.25s ease;
+            margin-bottom: 1rem;
+            border-radius: 0.75rem;
+        }
+
+        .cta-button {
+            background-color: #E75757;
+            color: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .try-another {
+            background-color: #F0F0F0;
+            color: #47403E;
+            box-shadow: none;
+        }
+
+        .cta-button:hover, .try-another:hover {
+            transform: scale(1.0425);
+        }
+
+        .reasons-box {
+            width: 48%;
+            background-color: #FDE6E8;
+            padding: 20px;
+            border-radius: 15px;
+        }
+
+        .reasons-box h3 {
+            margin-top: 0;
+            font-family: 'Wix Madefor Text', sans-serif;
+            color: #47403E;
+        }
+
+        .reasons-box ul {
+            padding-left: 20px;
+            margin-bottom: 0;
+            color: #5E5653;
+            font-family: 'Inter', sans-serif;
+            font-weight: 300;
+        }
+
         #loadingOverlay {
             display: none;
             position: fixed;
@@ -52,6 +201,7 @@
             justify-content: center;
             align-items: center;
         }
+
         .spinner {
             width: 50px;
             height: 50px;
@@ -60,81 +210,58 @@
             border-radius: 50%;
             animation: spin 1s linear infinite;
         }
+
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-        .banner {
-            display: flex;
-            justify-content: space-between;
-            background-color: #FFF0F0;
-            padding: 20px;
-            border-radius: 15px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        .banner-item {
-            flex: 1;
-            text-align: center;
-            padding: 0 10px;
-        }
-        .banner-item:not(:last-child) {
-            border-right: 1px solid #FFD6D6;
-        }
-        .banner-item h3 {
-            margin: 0 0 10px 0;
-            color: #FF6B6B;
-        }
-        .banner-item p {
-            margin: 0;
-            font-size: 14px;
-            color: #666;
-        }
-        .bottom-section {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 20px;
-        }
-        .button-column {
-            display: flex;
-            flex-direction: column;
-            width: 48%;
-        }
-        .cta-button, .try-another {
-            padding: 15px 20px;
-            font-size: 18px;
-            border-radius: 25px;
-            cursor: pointer;
-            text-align: center;
-            text-decoration: none;
-            border: none;
-            margin-bottom: 10px;
-        }
-        .cta-button {
-            background-color: #ff6b6b;
-            color: white;
-        }
-        .try-another {
-            background-color: #f5f5f5;
-            color: #333;
-        }
-        .reasons-box {
-            width: 48%;
-            background-color: #f5f5f5;
-            padding: 20px;
-            border-radius: 15px;
-            box-sizing: border-box;
-        }
-        .reasons-box h3 {
-            margin-top: 0;
-        }
-        .reasons-box ul {
-            padding-left: 20px;
-            margin-bottom: 0;
+
+        @media (max-width: 736px) {
+            body {
+                font-size: 11pt;
+                padding: 15px;
+            }
+
+            .banner {
+                flex-direction: column;
+            }
+
+            .banner-item {
+                padding: 10px 0;
+                border-right: none;
+                border-bottom: 1px solid #FFD6D6;
+            }
+
+            .banner-item:last-child {
+                border-bottom: none;
+            }
+
+            .bottom-section {
+                flex-direction: column;
+                margin-top: 3rem;
+            }
+
+            .button-column, .reasons-box {
+                width: 100%;
+            }
+
+            .button-column {
+                order: 1;
+                margin-bottom: 2rem;
+            }
+
+            .reasons-box {
+                order: 2;
+            }
+
+            .cta-button, .try-another {
+                margin-bottom: 1rem;
+            }}
         }
     </style>
 </head>
 <body>
+    <div class="content-wrapper">
     <div class="header">
         <img src="https://blendvertise.carrd.co/assets/images/image03.png?v=9ef200d0" alt="Blendvertise Logo" class="logo-image">
     </div>
@@ -163,18 +290,12 @@
         <div id="articleContent"></div>
     </div>
     
-    <div class="bottom-section">
-        <div class="button-column">
-            <a href="#" class="cta-button">Let's get started</a>
-            <button class="try-another" onclick="window.location.href='index.html'">Try another article</button>
+    <div style="display: flex; gap: 2rem; margin-top: 2rem;">
+        <div style="background-color: #E75757; padding: 1rem 2rem; border-radius: 0.75rem; flex: 1;">
+            <a href="#" style="color: white; text-decoration: none; display: block; width: 100%; text-align: center; font-family: 'Work Sans', sans-serif; font-size: 1.5em; font-weight: 500;">Let's get started</a>
         </div>
-        <div class="reasons-box">
-            <h3>3 Reasons to work with Blendvertise</h3>
-            <ul>
-                <li>Quick Integration - Wordpress, Contentful & Wix plugins</li>
-                <li>Extra Revenue - Blendvertise runs alongside your existing ads</li>
-                <li>Fully automated - Your articles are updated with the best ads every day</li>
-            </ul>
+        <div style="background-color: #F0F0F0; padding: 1rem 2rem; border-radius: 0.75rem; flex: 1;">
+            <button onclick="window.location.href='index.html'" style="background: none; border: none; color: #47403E; font-family: 'Work Sans', sans-serif; font-size: 1.5em; font-weight: 500; width: 100%; cursor: pointer; padding: 0;">Try another article</button>
         </div>
     </div>
 
@@ -220,8 +341,6 @@
                 return response.json();
             })
             .then(data => {
-                console.log('Airtable response:', data); // Debug log
-                
                 if (data && data.fields) {
                     if (data.fields.article) {
                         const sanitizedContent = sanitizeHTML(data.fields.article);
@@ -252,5 +371,6 @@
             articleContent.textContent = 'No record ID provided. Please submit content from the main page.';
         }
     </script>
+    </div>
 </body>
 </html>
