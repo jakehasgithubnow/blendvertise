@@ -254,7 +254,9 @@
 <body>
     <div class="content-wrapper">
         <div class="header">
-            <img src="https://blendvertise.carrd.co/assets/images/image03.png?v=9ef200d0" alt="Blendvertise Logo" class="logo-image">
+            <a href="https://blendvertise.com">
+                <img src="https://blendvertise.carrd.co/assets/images/image03.png?v=9ef200d0" alt="Blendvertise Logo" class="logo-image">
+            </a>
         </div>
         <h1>Here's your updated article</h1>
         <div class="stats" id="statsDescription">
@@ -283,8 +285,8 @@
 
     <!-- FAB Buttons -->
     <div class="fab-container">
-        <a href="#" class="fab fab-primary">Sign up now</a>
-        <button onclick="tryAnother()" class="fab fab-secondary">Try another article</button>
+        <a href="https://calendly.com/blendvertise/15min" class="fab fab-primary" target="_blank">Sign up now</a>
+        <button onclick="window.location.href='https://blendvertise.com/#demo'" class="fab fab-secondary">Try another article</button>
     </div>
 
     <div id="loadingOverlay">
@@ -292,7 +294,6 @@
     </div>
 
     <script>
-
         const loadingOverlay = document.getElementById('loadingOverlay');
         const articleContent = document.getElementById('articleContent');
         const statsDescription = document.getElementById('statsDescription');
@@ -308,10 +309,6 @@
             const temp = document.createElement('div');
             temp.textContent = str;
             return temp.innerHTML;
-        }
-
-        function tryAnother() {
-            window.location.href = 'index.html';
         }
 
         // Get the record ID directly from the URL
