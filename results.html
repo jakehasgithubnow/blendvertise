@@ -1,234 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
-    <!--Start of Tawk.to Script-->
-<script type="text/javascript">
-var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-(function(){
-var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-s1.async=true;
-s1.src='https://embed.tawk.to/65c64f1f8d261e1b5f5e5e20/1hm7aa5d9';
-s1.charset='UTF-8';
-s1.setAttribute('crossorigin','*');
-s0.parentNode.insertBefore(s1,s0);
-})();
-</script>
-<!--End of Tawk.to Script-->
-    <script type='text/javascript'>
-  window.smartlook||(function(d) {
-    var o=smartlook=function(){ o.api.push(arguments)},h=d.getElementsByTagName('head')[0];
-    var c=d.createElement('script');o.api=new Array();c.async=true;c.type='text/javascript';
-    c.charset='utf-8';c.src='https://web-sdk.smartlook.com/recorder.js';h.appendChild(c);
-    })(document);
-    smartlook('init', '55d4bc5051b76f459abb131a03abb253f600cb1a', { region: 'eu' });
-</script>
-    <script type='text/javascript'>
-  window.smartlook||(function(d) {
-    var o=smartlook=function(){ o.api.push(arguments)},h=d.getElementsByTagName('head')[0];
-    var c=d.createElement('script');o.api=new Array();c.async=true;c.type='text/javascript';
-    c.charset='utf-8';c.src='https://web-sdk.smartlook.com/recorder.js';h.appendChild(c);
-    })(document);
-    smartlook('init', '55d4bc5051b76f459abb131a03abb253f600cb1a', { region: 'eu' });
-</script>
-
-    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Blendvertise Results</title>
-    <link href="https://fonts.googleapis.com/css2?display=swap&family=Wix+Madefor+Text:ital,wght@0,800;1,800&family=Inter:ital,wght@0,300;1,300&family=Work+Sans:ital,wght@0,500;0,600;1,500;1,600" rel="stylesheet" type="text/css" />
     <style>
-        :root {
-            --background-height: 100vh;
-            --viewport-height: 100vh;
-        }
-
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: Arial, sans-serif;
             max-width: 800px;
             margin: 0 auto;
             padding: 20px;
-            background-color: #FFFFFF;
-            line-height: 1.0;
-            min-height: var(--viewport-height);
-            min-width: 320px;
-            overflow-x: hidden;
-            word-wrap: break-word;
+            background-color: white;
         }
-
-        body:before {
-            background-attachment: scroll;
-            content: '';
-            display: block;
-            height: var(--background-height);
-            left: 0;
-            pointer-events: none;
-            position: fixed;
-            top: 0;
-            transform: scale(1);
-            width: 100vw;
-            z-index: 0;
-            background-image: radial-gradient(circle, rgba(191,191,191,0.502) 1.5px, transparent 1.5px);
-            background-size: 24px 24px;
-            background-position: center;
-            background-repeat: repeat;
-            opacity: 0.5;
-        }
-
-        .content-wrapper {
-            position: relative;
-            z-index: 2;
-            padding-bottom: 120px; /* Space for FAB buttons */
-        }
-
         h1, h2 {
-            font-family: 'Wix Madefor Text', sans-serif;
-            color: #47403E;
-            font-weight: 800;
-            line-height: 1.125;
+            color: #333;
         }
-
-        .logo-image {
-            width: 195px; /* Increased by 30% from 150px */
-            height: auto;
-        }
-
         .content-box {
-            background-color: #FDE6E8;
+            background-color: #f5f5f5;
             padding: 20px;
             border-radius: 15px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             margin-bottom: 20px;
-            position: relative;
-            z-index: 1;
         }
-
         .stats {
-            background-color: #F69BA4;
-            padding: 20px;
+            background-color: #e9e9e9;
+            padding: 10px;
             border-radius: 10px;
             margin-bottom: 20px;
-            color: #47403E;
-            font-family: 'Inter', sans-serif;
-            font-weight: 300;
-            line-height: 1.4;
         }
-
-        /* Added markdown styles for stats description */
-        .stats p {
-            margin: 0.5em 0;
-        }
-
-        .stats strong {
-            font-weight: 600;
-        }
-
-        .stats em {
-            font-style: italic;
-        }
-
-        .stats a {
-            color: #47403E;
-            text-decoration: underline;
-        }
-
         .highlight {
             background-color: #F89AA6;
         }
-
-        .banner {
-            display: flex;
-            justify-content: space-between;
-            background-color: #FFF0F0;
-            padding: 20px;
-            border-radius: 15px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-
-        .banner-item {
-            flex: 1;
-            text-align: center;
-            padding: 0 10px;
-            font-family: 'Inter', sans-serif;
-        }
-
-        .banner-item:not(:last-child) {
-            border-right: 1px solid #FFD6D6;
-        }
-
-        .banner-item h3 {
-            margin: 0 0 10px 0;
-            color: #FF6B6B;
-            font-family: 'Wix Madefor Text', sans-serif;
-            font-weight: 800;
-        }
-
-        .banner-item p {
-            margin: 0;
-            font-size: 14px;
-            color: #5E5653;
-            font-weight: 300;
-        }
-
-        /* FAB Button Styles */
-        .fab-container {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 16px;
-            z-index: 1000;
-            width: 90%;
-            max-width: 600px;
-            padding: 0 20px;
-            box-sizing: border-box;
-        }
-
-        .fab {
-            flex: 1;
-            padding: 16px 24px;
-            border-radius: 12px;
-            font-family: 'Work Sans', sans-serif;
-            font-size: 1.25em;
-            font-weight: 500;
-            text-decoration: none;
-            text-align: center;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            transition: transform 0.25s ease, box-shadow 0.25s ease;
-            cursor: pointer;
-            border: none;
-            -webkit-tap-highlight-color: transparent;
-            /* Added for vertical centering */
+        .header {
             display: flex;
             align-items: center;
-            justify-content: center;
-            min-height: 36px;
+            margin-bottom: 20px;
         }
-
-        .fab:active {
-            transform: scale(0.95);
+        .logo-image {
+            width: 150px;
+            height: auto;
         }
-
-        .fab-primary {
-            background-color: #E75757;
-            color: white;
-        }
-
-        .fab-secondary {
-            background-color: #F0F0F0;
-            color: #47403E;
-        }
-
-        @media (hover: hover) {
-            .fab:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 6px 16px rgba(0,0,0,0.2);
-            }
-        }
-
-        /* Loading Styles */
         #loadingOverlay {
             display: none;
             position: fixed;
@@ -241,7 +52,6 @@ s0.parentNode.insertBefore(s1,s0);
             justify-content: center;
             align-items: center;
         }
-
         .spinner {
             width: 50px;
             height: 50px;
@@ -250,75 +60,122 @@ s0.parentNode.insertBefore(s1,s0);
             border-radius: 50%;
             animation: spin 1s linear infinite;
         }
-
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-
-        @media (max-width: 736px) {
-            body {
-                font-size: 11pt;
-                padding: 15px;
-            }
-
-            .banner {
-                flex-direction: column;
-            }
-
-            .banner-item {
-                padding: 10px 0;
-                border-right: none;
-                border-bottom: 1px solid #FFD6D6;
-            }
-
-            .banner-item:last-child {
-                border-bottom: none;
-            }
-
-            .fab {
-                font-size: 1.1em;
-                padding: 14px 20px;
-            }
+        .banner {
+            display: flex;
+            justify-content: space-between;
+            background-color: #FFF0F0;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .banner-item {
+            flex: 1;
+            text-align: center;
+            padding: 0 10px;
+        }
+        .banner-item:not(:last-child) {
+            border-right: 1px solid #FFD6D6;
+        }
+        .banner-item h3 {
+            margin: 0 0 10px 0;
+            color: #FF6B6B;
+        }
+        .banner-item p {
+            margin: 0;
+            font-size: 14px;
+            color: #666;
+        }
+        .bottom-section {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        .button-column {
+            display: flex;
+            flex-direction: column;
+            width: 48%;
+        }
+        .cta-button, .try-another {
+            padding: 15px 20px;
+            font-size: 18px;
+            border-radius: 25px;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            border: none;
+            margin-bottom: 10px;
+        }
+        .cta-button {
+            background-color: #ff6b6b;
+            color: white;
+        }
+        .try-another {
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        .reasons-box {
+            width: 48%;
+            background-color: #f5f5f5;
+            padding: 20px;
+            border-radius: 15px;
+            box-sizing: border-box;
+        }
+        .reasons-box h3 {
+            margin-top: 0;
+        }
+        .reasons-box ul {
+            padding-left: 20px;
+            margin-bottom: 0;
         }
     </style>
 </head>
 <body>
-    <div class="content-wrapper">
-        <div class="header">
-            <a href="https://blendvertise.com">
-                <img src="https://blendvertise.com/assets/images/image03.png?v=3a7d0e0d" alt="Blendvertise Logo" class="logo-image">
-            </a>
+    <div class="header">
+        <img src="https://blendvertise.carrd.co/assets/images/image03.png?v=9ef200d0" alt="Blendvertise Logo" class="logo-image">
+    </div>
+    <h1>Here's your updated article</h1>
+    <div class="stats">
+        We've added <span id="adCount"></span> ads with an estimated 4% ctr and $0.19 cpc.
+    </div>
+    
+    <div class="banner">
+        <div class="banner-item">
+            <h3>3,450 Ads Checked</h3>
+            <p>We've searched all of the major affiliate networks to find the ads that will perform best in your content.</p>
         </div>
-        <h1>Here's your updated article</h1>
-        <div class="stats" id="statsDescription">
-            <!-- Description will be populated from Airtable -->
+        <div class="banner-item">
+            <h3>Automatic, always up to date</h3>
+            <p>Install our Wordpress, Contentful or Wix plugin to get started. Your articles are updated daily.</p>
         </div>
-        
-        <div class="banner">
-            <div class="banner-item">
-                <h3>3,450 Ads Checked</h3>
-                <p>We've searched all of the major affiliate networks to find the ads that will perform best in your content.</p>
-            </div>
-            <div class="banner-item">
-                <h3>Automatic, always up to date</h3>
-                <p>Install our Wordpress, Contentful or Wix plugin to get started. Your articles are updated daily.</p>
-            </div>
-            <div class="banner-item">
-                <h3>You're in control</h3>
-                <p>You choose which brands to advertise, ad topics and ad density.</p>
-            </div>
-        </div>
-        
-        <div id="article" class="content-box">
-            <div id="articleContent"></div>
+        <div class="banner-item">
+            <h3>You're in control</h3>
+            <p>You choose which brands to advertise, ad topics and ad density.</p>
         </div>
     </div>
-
-    <!-- FAB Buttons -->
-    <div class="fab-container">
-        <a href="https://calendly.com/blendvertise/15min" class="fab fab-primary" target="_blank">Sign up now</a>
-        <button onclick="window.location.href='https://blendvertise.com/#demo'" class="fab fab-secondary">Try another article</button>
+    
+    <div id="article" class="content-box">
+        <h2>Original Article</h2>
+        <div id="articleContent"></div>
+    </div>
+    
+    <div class="bottom-section">
+        <div class="button-column">
+            <a href="#" class="cta-button">Let's get started</a>
+            <button class="try-another" onclick="window.location.href='index.html'">Try another article</button>
+        </div>
+        <div class="reasons-box">
+            <h3>3 Reasons to work with Blendvertise</h3>
+            <ul>
+                <li>Quick Integration - Wordpress, Contentful & Wix plugins</li>
+                <li>Extra Revenue - Blendvertise runs alongside your existing ads</li>
+                <li>Fully automated - Your articles are updated with the best ads every day</li>
+            </ul>
+        </div>
     </div>
 
     <div id="loadingOverlay">
@@ -328,7 +185,7 @@ s0.parentNode.insertBefore(s1,s0);
     <script>
         const loadingOverlay = document.getElementById('loadingOverlay');
         const articleContent = document.getElementById('articleContent');
-        const statsDescription = document.getElementById('statsDescription');
+        const adCountElement = document.getElementById('adCount');
 
         function getUrlParameter(name) {
             name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
@@ -347,13 +204,14 @@ s0.parentNode.insertBefore(s1,s0);
         const recordId = getUrlParameter('recordId');
 
         if (recordId) {
-            const airtableUrl = `https://api.airtable.com/v0/appebg5mTyr0n3IC2/tblT2UflSMRpwrBtW/${recordId}`;
+            const nocodbUrl = `https://api.nocodb.com/api/v2/tables/demo_app/data/${recordId}`;
 
             loadingOverlay.style.display = 'flex';
 
-            fetch(airtableUrl, {
+            fetch(nocodbUrl, {
                 headers: {
-                    'Authorization': 'Bearer patNwUWSMcd150uoi.f61251b6451ad5b257df31a8be47c67e27adbeeb3cced79565ff3c331ff5f896'
+                    'Authorization': 'Bearer fUEO4MC1E8970QLwpnfSakq84SayRAg9X6MmSNs1',
+                    'Content-Type': 'application/json'
                 }
             })
             .then(response => {
@@ -363,17 +221,11 @@ s0.parentNode.insertBefore(s1,s0);
                 return response.json();
             })
             .then(data => {
-                if (data && data.fields) {
-                    if (data.fields.description) {
-                        // Simply replace **text** with <strong>text</strong>
-                        const withBold = data.fields.description.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-                        statsDescription.innerHTML = withBold;
-                    } else {
-                        statsDescription.textContent = 'Analysis complete';
-                    }
-
-                    if (data.fields.article) {
-                        const sanitizedContent = sanitizeHTML(data.fields.article);
+                console.log('NocoDB response:', data);
+                
+                if (data) {
+                    if (data.article) {
+                        const sanitizedContent = sanitizeHTML(data.article);
                         const formattedContent = sanitizedContent
                             .replace(/\n/g, '<br>')
                             .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank">$1</a>')
@@ -381,21 +233,24 @@ s0.parentNode.insertBefore(s1,s0);
                             .replace(/&lt;\/span&gt;/g, '</span>');
                         articleContent.innerHTML = formattedContent;
                     }
+
+                    // Count the number of ad fields
+                    const adFields = Object.keys(data).filter(key => key.startsWith('ad_') && key.endsWith('_text'));
+                    adCountElement.textContent = adFields.length;
                 } else {
-                    throw new Error('Invalid response format from Airtable');
+                    throw new Error('Invalid response format from NocoDB');
                 }
             })
             .catch(error => {
                 console.error('Error:', error);
                 articleContent.textContent = 'Error fetching results. Please try again.';
-                statsDescription.textContent = 'Error loading results';
+                adCountElement.textContent = '0';
             })
             .finally(() => {
                 loadingOverlay.style.display = 'none';
             });
         } else {
             articleContent.textContent = 'No record ID provided. Please submit content from the main page.';
-            statsDescription.textContent = 'Missing article ID';
         }
     </script>
 </body>
