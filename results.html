@@ -204,13 +204,13 @@
         const recordId = getUrlParameter('recordId');
 
         if (recordId) {
-            const nocodbUrl = `https://api.nocodb.com/api/v1/db/data/v1/demo_app/Table1/records/${recordId}`;
+            const nocodbUrl = `https://corsproxy.io/?${encodeURIComponent(`https://api.nocodb.com/api/v1/db/data/v1/demo_app/Table1/records/${recordId}`)}`;
 
             loadingOverlay.style.display = 'flex';
 
             fetch(nocodbUrl, {
                 headers: {
-                    'Authorization': 'Bearer fUEO4MC1E8970QLwpnfSakq84SayRAg9X6MmSNs1',
+                    'xc-token': 'fUEO4MC1E8970QLwpnfSakq84SayRAg9X6MmSNs1',
                     'Content-Type': 'application/json'
                 }
             })
