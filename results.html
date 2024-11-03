@@ -204,7 +204,7 @@
         const recordId = getUrlParameter('recordId');
 
         if (recordId) {
-            const nocodbUrl = `https://api.nocodb.com/api/v2/tables/demo_app/data/${recordId}`;
+            const nocodbUrl = `https://api.nocodb.com/api/v1/db/data/v1/demo_app/Table1/records/${recordId}`;
 
             loadingOverlay.style.display = 'flex';
 
@@ -223,8 +223,9 @@
             .then(data => {
                 console.log('NocoDB response:', data);
                 
-                if (data) {
-                    if (data.article) {
+                if (data && data.list && data.list.length > 0) {
+                    const record = data.list[0];
+                    if (record.article) {
                         const sanitizedContent = sanitizeHTML(data.article);
                         const formattedContent = sanitizedContent
                             .replace(/\n/g, '<br>')
